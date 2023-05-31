@@ -3,11 +3,12 @@ import tabletImage from '/assets/home/tablet/image-header.jpg';
 import desktopImage from '/assets/home/desktop/image-header.jpg';
 import SVG from 'react-inlinesvg'
 import styled from "styled-components"
+import ProductPreview from '../components/ProductPreview';
 
 export default function homePage(){
     const StyledDiv = styled.div`
         height:100%;
-        background-color: #0E0E0E;
+        background-color: white;
     `
     const NewProductContainer = styled.div`
         color:white;
@@ -150,6 +151,7 @@ export default function homePage(){
                     </ProductCard>
                 </CardListContainer>
             </ProductListContainer>
+            <ProductPreview />
         </StyledDiv>
     )
 }
