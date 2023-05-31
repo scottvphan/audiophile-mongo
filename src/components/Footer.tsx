@@ -2,17 +2,16 @@ import SVG from "react-inlinesvg";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const Footer = styled.nav`
-    background-color: black;
+const Footer = styled.footer`
+    background-color: #101010;
     color: white;
-    height:25vh;
 `;
 const LinkContainer = styled.div`
     display: flex;
     gap: 20px;
 `;
 const FooterContainer = styled.div`
-    padding: 0rem 10rem;
+    padding: 0rem 20rem;
     display: flex;
     flex-direction: column;
 `;

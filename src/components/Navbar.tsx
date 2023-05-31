@@ -3,20 +3,20 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const Nav = styled.nav`
-    background-color:black;
+    background-color:#101010;
     color:white;
-    height:10vh;
-    border-bottom: 1px solid #0E0E0E;
+    padding: 0rem 20rem;
 `
 const LinkContainer = styled.div`
     display:flex;
     gap:20px;
 `
 const NavContainer = styled.div`
-    padding: 1rem 10rem;
     display:flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #ffffff33;
+    padding:0.5rem 0;
 `
 const StyledLink = styled(Link)`
     color:white;
