@@ -7,12 +7,12 @@ export default function ProductPreview(){
         display:flex;
         flex-direction: column;
         padding:1rem 20rem;
+        gap:1rem;
     `
     const ZX9Container = styled.div`
         border-radius:8px;
         background-color: #D87D4A;
         width:100%;
-        padding:0 1rem;
         display:flex;
         align-items: center;
         justify-content: space-around;
@@ -53,14 +53,18 @@ export default function ProductPreview(){
         border-radius:8px;
         background-image: url(${ZX7image});
         background-repeat: no-repeat;
-        background-size: contain;
+        background-size: cover;
         width:100%;
-        padding:1rem;
         height:34vh;
     `
     const ZX7DescriptionContainer = styled.section`
         width:30%;
         border:1px solid red;
+        height:100%;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     `
     const ZX7Button = styled.button`
         border: 1px solid #000000;
@@ -68,22 +72,30 @@ export default function ProductPreview(){
         color:black;
         font-weight:700;
         background: none;
+        width:40%;
     `
     const YX1DescriptionContainer = styled.section`
         width:50%;
+        background: #F1F1F1;
+        border-radius:8px;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     `
     const YX1Container = styled.div`
         border-radius:8px;
         display:flex;
-        align-items: center;
-        background: #F1F1F1;
         width:100%;
+        gap:1rem;
     `
     const StyledImgContainer = styled.div`
         width:50%;
     `
     const StyledImg = styled.img`
         width:100%;
+        height:100%;
+        border-radius:8px;
     `
     return(
         <ProductPreviewContainer>
