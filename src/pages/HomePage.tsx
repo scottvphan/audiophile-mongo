@@ -5,7 +5,7 @@ import SVG from 'react-inlinesvg'
 import styled from "styled-components"
 import ProductPreview from '../components/ProductPreview';
 
-export default function homePage(){
+export default function HomePage(){
     const StyledDiv = styled.div`
         height:100%;
         background-color: white;
@@ -14,9 +14,9 @@ export default function homePage(){
         color:white;
         display:flex;
     `
-    const StyledImg = styled.img`
-        width:50%;
-    `
+    // const StyledImg = styled.img`
+    //     width:50%;
+    // `
     const StyledSection = styled.section`
         padding:0 20rem;
         width:100%;
@@ -152,6 +152,7 @@ export default function homePage(){
                 </CardListContainer>
             </ProductListContainer>
             <ProductPreview />
+            
         </StyledDiv>
     )
 }
