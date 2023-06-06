@@ -22,7 +22,6 @@ export default function ProductPreview(){
     `
     const ZX9ImageContainer = styled.div`
         width:50%;
-        border:1px solid red;
     `
     const ZX9Header = styled.h1`
         font-style: normal;
@@ -42,7 +41,7 @@ export default function ProductPreview(){
         opacity: 0.75;
     `
     const ZX9DescriptionContainer= styled.section`
-        width:20%;
+        width:40%;
     `
     const ZX9Button = styled.button`
         background-color: #000000;
@@ -58,8 +57,7 @@ export default function ProductPreview(){
         height:34vh;
     `
     const ZX7DescriptionContainer = styled.section`
-        width:30%;
-        border:1px solid red;
+        width:40%;
         height:100%;
         display:flex;
         justify-content: center;

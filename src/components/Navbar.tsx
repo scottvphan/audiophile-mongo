@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const Nav = styled.nav`
-    background-color:#101010;
+    /* background-color:#101010; */
+    background-color:black;
     color:white;
     padding: 0rem 20rem;
 `
@@ -31,9 +32,9 @@ export default function Navbar(){
                 <h1>audiophile</h1>
                 <LinkContainer>
                     <StyledLink to="/">HOME</StyledLink>
-                    <StyledLink to="/">HEADPHONES</StyledLink>
-                    <StyledLink to="/">SPEAKERS</StyledLink>
-                    <StyledLink to="/">EARPHONES</StyledLink>
+                    <StyledLink to="/product/headphones">HEADPHONES</StyledLink>
+                    <StyledLink to="/product/speakers">SPEAKERS</StyledLink>
+                    <StyledLink to="/product/earphones">EARPHONES</StyledLink>
                 </LinkContainer>
                 <SVG src='assets/shared/desktop/icon-cart.svg'/>
             </NavContainer>
