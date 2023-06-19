@@ -55,10 +55,10 @@ export default function Navbar() {
                 <TopFooterContainer>
                     <h1>audiophile</h1>
                     <LinkContainer>
-                        <StyledLink to="/">HOME</StyledLink>
-                        <StyledLink to="/">HEADPHONES</StyledLink>
-                        <StyledLink to="/">SPEAKERS</StyledLink>
-                        <StyledLink to="/">EARPHONES</StyledLink>
+                    <StyledLink to="/">HOME</StyledLink>
+                    <StyledLink to="/products/headphones">HEADPHONES</StyledLink>
+                    <StyledLink to="/products/speakers">SPEAKERS</StyledLink>
+                    <StyledLink to="/products/earphones">EARPHONES</StyledLink>
                     </LinkContainer>
                 </TopFooterContainer>
                 <BottomFooterContainer>
@@ -73,9 +73,9 @@ export default function Navbar() {
                         <StyledParagraph>Copyright 2021. All Rights Reserved</StyledParagraph>
                     </LeftContainer>
                     <RightContainer>
-                        <SVG src="assets/facebook.svg"></SVG>
-                        <SVG src="assets/twitter.svg"></SVG>
-                        <SVG src="assets/instagram.svg"></SVG>
+                        <SVG src="/assets/facebook.svg"></SVG>
+                        <SVG src="/assets/twitter.svg"></SVG>
+                        <SVG src="/assets/instagram.svg"></SVG>
                     </RightContainer>
                 </BottomFooterContainer>
             </FooterContainer>
