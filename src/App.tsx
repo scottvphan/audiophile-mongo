@@ -18,13 +18,14 @@ const GlobalStyle = createGlobalStyle`
   }
   button {
     font-family:'Manrope', Arial, Helvetica, sans-serif;
+    cursor:pointer;
   }
 `
 
 function App() {
     const [data, setData] = useState<unknown>('')
   useEffect(() =>{
-    fetch("../data.json")
+    fetch("/data.json")
       .then(response => response.json())
       .then(data => setData(data))
   }, [])
@@ -32,16 +33,14 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
-        <Route path="/" element={<HomePage />}/>
-        <Route path="/products" element={<ProductCategoryPage data ={data}/>}>
-          <Route path='/products:id' element={<ProductDetailPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/products" element={<ProductCategoryPage data={data} />}>
+          <Route path='/products/:id' element={<ProductCategoryPage data={data} />}/>
         </Route>
-        <Route path="/products/detail" element={<ProductDetailPage />}>
-          <Route path='/products/details:' element={<ProductDetailPage />} />
-        </Route>
+        <Route path="/products/details/:id" element={<ProductDetailPage data={data} />} />
       </Route>
     )
-  )
+  );  
 
   return (
     <>
