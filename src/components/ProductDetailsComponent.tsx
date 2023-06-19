@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import {v4 as uuidv4} from 'uuid'
+import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const ProductDetail = styled.div`
     display: flex;
@@ -99,38 +99,36 @@ const StyledLink = styled(Link)`
     color: #d87d4a;
 `;
 export default function ProductDetails(props: any) {
-    console.log(props)
-    const [mappedList, setMappedList] = useState<any>('')
-    const [mappedListLoaded, setMappedListLoaded] = useState<boolean>(false)
-    useEffect(() =>{
-        const mappedData = props.data.includes.map((data:any) => {
-            return(
-                <li key={uuidv4()}>{data.item}</li>
-            )
-        })
-        setMappedList(mappedData)
-        setMappedListLoaded(true)
-    }, [props.data.includes])
+    const data = props.data
+    const [mappedList, setMappedList] = useState<any>("");
+    const [mappedListLoaded, setMappedListLoaded] = useState<boolean>(false);
+    useEffect(() => {
+        const mappedData = data.includes.map((data: any) => {
+            return <li key={uuidv4()}>{data.item}</li>;
+        });
+        setMappedList(mappedData);
+        setMappedListLoaded(true);
+    }, [data.includes]);
     return (
         <>
             <StyledLink to={"/"}>Go Back</StyledLink>
             <ProductDetail>
                 <ProductImageContainer>
-                    <ProductImg src={props.data.image.desktop} />
+                    <ProductImg src={data.image.desktop} />
                 </ProductImageContainer>
                 <ProductDescriptionContainer>
-                    {props.data.new && (
+                    {data.new && (
                         <ProductDescriptionNewTag>
                             NEW PRODUCT
                         </ProductDescriptionNewTag>
                     )}
                     <ProductDescriptionHeading>
-                        {props.data.name}
+                        {data.name}
                     </ProductDescriptionHeading>
                     <ProductDescription>
-                        {props.data.description}
+                        {data.description}
                     </ProductDescription>
-                    <h2>{'$ ' + props.data.price}</h2>
+                    <h2>{"$ " + data.price}</h2>
                     <InputContainer>
                         <Input type="number" />
                         <ProductButton>Add To Cart</ProductButton>
@@ -140,20 +138,16 @@ export default function ProductDetails(props: any) {
             <FeaturesContainer>
                 <FeatureContainer>
                     <h1>FEATURES</h1>
-                    <p>
-                        {props.data.features}
-                    </p>
+                    <p>{data.features}</p>
                 </FeatureContainer>
                 <InTheBoxContainer>
-                    <ul>
-                        {mappedListLoaded && mappedList}
-                    </ul>
+                    <ul>{mappedListLoaded && mappedList}</ul>
                 </InTheBoxContainer>
             </FeaturesContainer>
             <ImageGalleryContainer>
-                <Image1 src={props.data.gallery.first.desktop} />
-                <Image2 src={props.data.gallery.second.desktop} />
-                <Image3 src={props.data.gallery.third.desktop} />
+                <Image1 src={data.gallery.first.desktop} />
+                <Image2 src={data.gallery.second.desktop} />
+                <Image3 src={data.gallery.third.desktop} />
             </ImageGalleryContainer>
             <RecommendationHeading>You May Also Like</RecommendationHeading>
         </>
