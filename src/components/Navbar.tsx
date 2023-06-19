@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SVG from 'react-inlinesvg'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const Nav = styled.nav`
-    /* background-color:#101010; */
-    background-color:black;
+    background-color:#101010;
+    /* background-color:black; */
     color:white;
     padding: 0rem 20rem;
+    z-index:1;
+    position: relative;
 `
 const LinkContainer = styled.div`
     display:flex;
@@ -24,8 +27,11 @@ const StyledLink = styled(Link)`
     font-weight:700;
     text-decoration:none;
 `
-export default function Navbar(){
-
+const StyledSVG = styled(SVG)`
+    cursor:pointer;
+`
+export default function Navbar({setIsCartOpen, isCartOpen}:any){
+    console.log()
     return(
         <Nav>
             <NavContainer>
@@ -36,7 +42,9 @@ export default function Navbar(){
                     <StyledLink to="/products/speakers">SPEAKERS</StyledLink>
                     <StyledLink to="/products/earphones">EARPHONES</StyledLink>
                 </LinkContainer>
-                <SVG src='assets/shared/desktop/icon-cart.svg'/>
+                <StyledSVG onClick = {() =>{
+                    setIsCartOpen(!isCartOpen)
+                }} src='/assets/shared/desktop/icon-cart.svg'/>
             </NavContainer>
         </Nav>
     )
