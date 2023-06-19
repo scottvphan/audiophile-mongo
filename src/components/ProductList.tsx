@@ -52,21 +52,21 @@ export default function ProductList() {
                     <ProductCardHeading>HEADPHONES</ProductCardHeading>
                     <ShopTextContainer>
                         <ProductCardSubHeading>SHOP</ProductCardSubHeading>
-                        <SVG src="assets/shared/desktop/icon-arrow-right.svg" />
+                        <SVG src="/assets/shared/desktop/icon-arrow-right.svg" />
                     </ShopTextContainer>
                 </ProductCard>
                 <ProductCard>
                     <ProductCardHeading>SPEAKERS</ProductCardHeading>
                     <ShopTextContainer>
                         <ProductCardSubHeading>SHOP</ProductCardSubHeading>
-                        <SVG src="assets/shared/desktop/icon-arrow-right.svg" />
+                        <SVG src="/assets/shared/desktop/icon-arrow-right.svg" />
                     </ShopTextContainer>
                 </ProductCard>
                 <ProductCard>
                     <ProductCardHeading>EARPHONES</ProductCardHeading>
                     <ShopTextContainer>
                         <ProductCardSubHeading>SHOP</ProductCardSubHeading>
-                        <SVG src="assets/shared/desktop/icon-arrow-right.svg" />
+                        <SVG src="/assets/shared/desktop/icon-arrow-right.svg" />
                     </ShopTextContainer>
                 </ProductCard>
             </CardListContainer>
