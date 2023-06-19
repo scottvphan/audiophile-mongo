@@ -57,7 +57,11 @@ export default function CategoryPageComponent(props:any) {
         border: none;
         letter-spacing: 0.25em;
     `;
-
+    const currentURL = `/products/details/${props.data.name}`
+    const cleanedURL = currentURL.replace(/ /g, '-');
+    const handleLinkClick = () =>{
+        window.location.href = cleanedURL
+    }
     return (
         <>
             <ProductCategoryListContainer>
@@ -76,7 +80,7 @@ export default function CategoryPageComponent(props:any) {
                     <ProductDescription>
                         {props.data.description}
                     </ProductDescription>
-                    <ProductButton>See Product</ProductButton>
+                    <ProductButton onClick={handleLinkClick}>See Product</ProductButton>
                 </ProductDescriptionContainer>
             </ProductCategoryListContainer>
         </>
