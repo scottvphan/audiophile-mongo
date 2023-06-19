@@ -14,9 +14,6 @@ export default function HomePage(){
         color:white;
         display:flex;
     `
-    // const StyledImg = styled.img`
-    //     width:50%;
-    // `
     const StyledSection = styled.section`
         padding:0 20rem;
         width:100%;
