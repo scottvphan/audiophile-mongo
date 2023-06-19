@@ -1,9 +1,12 @@
 import mobileImage from '/assets/home/mobile/image-header.jpg';
 import tabletImage from '/assets/home/tablet/image-header.jpg';
 import desktopImage from '/assets/home/desktop/image-header.jpg';
-import SVG from 'react-inlinesvg'
 import styled from "styled-components"
 import ProductPreview from '../components/ProductPreview';
+import { useAuth0 } from '@auth0/auth0-react'
+import LogoutButton from '../components/LogoutButton';
+import LoginButton from '../components/LoginButton';
+import ProductCardList from '../components/ProductCardList';
 
 export default function HomePage(){
     const StyledDiv = styled.div`
@@ -70,86 +73,26 @@ export default function HomePage(){
         line-height: 18px;
         letter-spacing: 1px;
     `
-    const ProductListContainer = styled.div`
-        background-color:white;
-    `
-    const ProductCard = styled.div`
-        background: #F1F1F1;
-        border-radius: 8px;
-        text-align:center;
-        padding: 0 1rem;
-        width:100%;
-    `
-    const CardListContainer = styled.div`
-        display:flex;
-        justify-content: space-between;
-        padding:1rem 20rem;
-        gap:2rem;
-    `
-    const ProductCardHeading = styled.h1`
-        font-style: normal;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 25px;
-        text-align: center;
-        letter-spacing: 1.28571px;
-    `
-    const ProductCardSubHeading = styled.h6`
-        font-family: 'Manrope';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 13px;
-        line-height: 18px;
-        letter-spacing: 1px;
-        color: #000000;
-        mix-blend-mode: normal;
-        opacity: 0.5;
-    `
-    const ShopTextContainer = styled.div`
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        gap:10px;
-    `
+
+    const { isAuthenticated } = useAuth0();
+    
     return(
-        <StyledDiv>
-            <NewProductContainer>
-                <StyledSection>
-                    <ProductContainer>
-                        <ProductHeading>NEW PRODUCT</ProductHeading>
-                        <StyledHeading>XX99 MARK II HEADPHONES</StyledHeading>
-                        <ProductDescription>Experience natural, lifelike audio and exceptional build quality made for the passionate music enthusiast</ProductDescription>
-                        <ProductButton>SEE PRODUCT</ProductButton>
-                    </ProductContainer>
-                </StyledSection>
-            </NewProductContainer>
-            <ProductListContainer>
-                <CardListContainer>
-                    <ProductCard>
-                        <ProductCardHeading>HEADPHONES</ProductCardHeading>
-                        <ShopTextContainer>
-                            <ProductCardSubHeading>SHOP</ProductCardSubHeading>
-                            <SVG src="assets/shared/desktop/icon-arrow-right.svg" />
-                        </ShopTextContainer>
-                    </ProductCard>
-                    <ProductCard>
-                        <ProductCardHeading>SPEAKERS</ProductCardHeading>
-                        <ShopTextContainer>
-                            <ProductCardSubHeading>SHOP</ProductCardSubHeading>
-                            <SVG src="assets/shared/desktop/icon-arrow-right.svg" />
-                        </ShopTextContainer>
-                    </ProductCard>
-                    <ProductCard>
-                        <ProductCardHeading>EARPHONES</ProductCardHeading>
-                        <ShopTextContainer>
-                            <ProductCardSubHeading>SHOP</ProductCardSubHeading>
-                            <SVG src="assets/shared/desktop/icon-arrow-right.svg" />
-                        </ShopTextContainer>
-                    </ProductCard>
-                </CardListContainer>
-            </ProductListContainer>
-            <ProductPreview />
-            
-        </StyledDiv>
+        <>
+            {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+            <StyledDiv>
+                <NewProductContainer>
+                    <StyledSection>
+                        <ProductContainer>
+                            <ProductHeading>NEW PRODUCT</ProductHeading>
+                            <StyledHeading>XX99 MARK II HEADPHONES</StyledHeading>
+                            <ProductDescription>Experience natural, lifelike audio and exceptional build quality made for the passionate music enthusiast</ProductDescription>
+                            <ProductButton>SEE PRODUCT</ProductButton>
+                        </ProductContainer>
+                    </StyledSection>
+                </NewProductContainer>
+                <ProductCardList />
+                <ProductPreview />
+            </StyledDiv>
+        </>
     )
 }
