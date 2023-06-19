@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom'
 import ProductCategoryPage from './pages/ProductCategoryPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import { useState, useEffect } from 'react';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -21,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function App() {
-  const [data, setData] = useState<unknown>('')
+    const [data, setData] = useState<unknown>('')
   useEffect(() =>{
     fetch("../data.json")
       .then(response => response.json())
@@ -35,15 +36,25 @@ function App() {
         <Route path="/products" element={<ProductCategoryPage data ={data}/>}>
           <Route path='/products:id' element={<ProductDetailPage />} />
         </Route>
-        <Route path="/products/detail" element={<ProductDetailPage />}></Route>
+        <Route path="/products/detail" element={<ProductDetailPage />}>
+          <Route path='/products/details:' element={<ProductDetailPage />} />
+        </Route>
       </Route>
     )
   )
 
   return (
     <>
-      <GlobalStyle />
-      <RouterProvider router={router} />
+      <Auth0Provider
+        domain="dev-g4y2r5dknwja6vmn.us.auth0.com"
+        clientId="lBcslrA0ORiR01tbzvT39N3mVItYqbsZ"
+        authorizationParams={{
+          redirect_uri: window.location.origin
+        }}
+      >
+        <GlobalStyle />
+        <RouterProvider router={router} />
+      </Auth0Provider>
     </>
   )
 }
