@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components";
 
-export default function CategoryPageComponent(props:any) {
+export default function CategoryPageComponent({data}:any) {
     const ProductCategoryListContainer = styled.div`
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -57,7 +57,7 @@ export default function CategoryPageComponent(props:any) {
         border: none;
         letter-spacing: 0.25em;
     `;
-    const currentURL = `/products/details/${props.data.name}`
+    const currentURL = `/products/details/${data.name}`
     const cleanedURL = currentURL.replace(/ /g, '-');
     const handleLinkClick = () =>{
         window.location.href = cleanedURL
@@ -66,19 +66,19 @@ export default function CategoryPageComponent(props:any) {
         <>
             <ProductCategoryListContainer>
                 <ProductImageContainer>
-                    <ProductImg src={props.data.categoryImage.desktop} />
+                    <ProductImg src={data.categoryImage.desktop} />
                 </ProductImageContainer>
                 <ProductDescriptionContainer>
-                    {props.data.new &&
+                    {data.new &&
                         <ProductDescriptionNewTag>
                             NEW PRODUCT
                         </ProductDescriptionNewTag>
                     }
                     <ProductDescriptionHeading>
-                        {props.data.name}
+                        {data.name}
                     </ProductDescriptionHeading>
                     <ProductDescription>
-                        {props.data.description}
+                        {data.description}
                     </ProductDescription>
                     <ProductButton onClick={handleLinkClick}>See Product</ProductButton>
                 </ProductDescriptionContainer>
