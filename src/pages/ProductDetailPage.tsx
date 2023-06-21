@@ -108,6 +108,7 @@ const ProductDetailContainer = styled.div`
 // `;
 const ProductListContainer = styled.div`
     background-color: white;
+    margin:2rem 0;
 `;
 const ProductCard = styled(Link)`
     background: #f1f1f1;
@@ -156,7 +157,7 @@ export default function ProductDetailPage(props: any) {
     const currentURL = window.location.pathname;
     const productName = currentURL
         .replace("/products/details/", "")
-        .replace(/-/g, " ");
+    console.log(productName)
     const [filteredData, setFilteredData] = useState<any>("");
     const [filteredDataLoaded, setFilteredDataLoaded] = useState(false);
     const [mappedData, setMappedData] = useState<any>("");
@@ -165,7 +166,7 @@ export default function ProductDetailPage(props: any) {
     useEffect(() => {
         if (props.data) {
             const filtereddata = props.data.filter((data: any) => {
-                if (data.name === productName) {
+                if (data.slug === productName) {
                     return data;
                 }
             });
