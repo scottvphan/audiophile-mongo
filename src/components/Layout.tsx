@@ -1,14 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CartModal from "./CartModal";
-
-
-
+import { useAuth0 } from "@auth0/auth0-react";
 export default function Layout() {
-    const [cart, setCart] = useState<any>({});
+    const { isAuthenticated, user, } = useAuth0();
+
+    const [cart, setCart] = useState<any>(
+        isAuthenticated ?
+        JSON.parse(localStorage.getItem(`${user?.email}`) ?? '{}')
+        :
+        JSON.parse(sessionStorage.getItem('cart') ?? '{}')
+    );
+    // useEffect(() =>{
+    //     if(cart){
+    //     }
+    // }, [cart])
     const [isCartOpen, setIsCartOpen] = useState<any>(false)
     const NavbarProps = {
         cart: cart,
@@ -19,7 +28,7 @@ export default function Layout() {
     return (
         <>
             <Navbar {...NavbarProps}  />
-            {isCartOpen && <CartModal />}
+            {isCartOpen && <CartModal {...NavbarProps} />}
             <Outlet context={{cart, setCart, isCartOpen, setIsCartOpen}} />
             <Footer />
         </>
@@ -27,6 +36,6 @@ export default function Layout() {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-// export function useCartContext() {
-//     return useContext(CartContext);
-// }
+export function useLayoutContext() {
+    return useOutletContext<any>();
+}
