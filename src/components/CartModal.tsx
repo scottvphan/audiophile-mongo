@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components";
 import CartComponent from "./CartComponent";
+import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const Backdrop = styled.div`
     position: fixed;
@@ -7,29 +10,25 @@ const Backdrop = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(
-        0,
-        0,
-        0,
-        0.5
-    );
+    background-color: rgba(0, 0, 0, 0.5);
     display: block;
-    z-index:0;
+    z-index: 0;
 `;
 const CartContainer = styled.div`
-    position:absolute;
-    top:20%;
-    left:67%;
+    position: absolute;
+    top: 20%;
+    left: 67%;
     /* width:15%; */
     background-color: white;
-    z-index:1;
-    padding:1rem;
+    z-index: 1;
+    padding: 1rem;
+    border-radius: 0.5rem;
 `;
 const TopContainer = styled.div`
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
-`
+`;
 const CartHeading = styled.h1`
     font-style: normal;
     font-weight: 700;
@@ -38,7 +37,7 @@ const CartHeading = styled.h1`
     letter-spacing: 1.28571px;
     text-transform: uppercase;
     color: #000000;
-`
+`;
 const RemoveAll = styled.p`
     font-style: normal;
     font-weight: 500;
@@ -48,17 +47,81 @@ const RemoveAll = styled.p`
     color: #000000;
     mix-blend-mode: normal;
     opacity: 0.5;
+`;
+const TotalContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+const TotalPrice = styled.h6`
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 25px;
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.5;
 `
-export default function CartModal() {
+const MappedContainer = styled.div`
+    display: grid;
+    gap: 0.5rem;
+    align-items: center;
+`;
+const CheckoutButton = styled.button`
+    background-color: #d87d4a;
+    color: white;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border:none;
+    width:100%;
+    padding:0.8rem;
+`;
+interface Cart {
+    name: string;
+    image: string;
+    quantity: string;
+    total: number;
+}
+export default function CartModal({ cart, setCart }: any) {
+    const [mappedData, setMappedData] = useState<any>("");
+    const [totalPrice, setTotalPrice] = useState<any>(0);
+    useEffect(() => {
+        const mappeddata = Object.values(cart).map((data: any) => {
+            return <CartComponent key={uuidv4()} data={data} />;
+        });
+        setMappedData(mappeddata);
+        const total = Object.values(cart).reduce(
+            (accumulator: number, item: unknown) => {
+                const cartItem = item as Cart;
+                return accumulator + cartItem.total;
+            },
+            0
+        );
+        setTotalPrice(total);
+    }, [cart]);
+    function removeAllItems() {
+        setCart({});
+    }
+    const cartLength = Object.values(cart).length;
     return (
         <>
             <Backdrop />
             <CartContainer>
                 <TopContainer>
-                    <CartHeading>Cart (3)</CartHeading>
-                    <RemoveAll>Remove All</RemoveAll>
+                    <CartHeading>Cart ({cartLength})</CartHeading>
+                    <RemoveAll onClick={removeAllItems}>Remove All</RemoveAll>
                 </TopContainer>
-                <CartComponent />
+                <MappedContainer>{mappedData}</MappedContainer>
+                <TotalContainer>
+                    <TotalPrice>TOTAL</TotalPrice>
+                    <h4>$ {totalPrice}</h4>
+                </TotalContainer>
+                <CheckoutButton>Check Out</CheckoutButton>
             </CartContainer>
         </>
     );

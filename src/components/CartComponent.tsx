@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components"
 
 const CartComponentContainer = styled.div`
@@ -5,13 +6,13 @@ const CartComponentContainer = styled.div`
     align-items: center;
 `
 const CartComponentLeft = styled.div`
-    width:60%;
+    width:70%;
     display:flex;
     align-items: center;
     gap:0.5rem;
 `
 const CartComponentRight = styled.div`
-    width:40%;
+    width:30%;
 `
 const StyledImg = styled.img`
     width:64px;
@@ -42,21 +43,22 @@ const ProductInfoPrice = styled.p`
     margin:0;
 `
 const StyledInput = styled.input`
+    height:100%;
     width:100%;
+    text-align: center;
 `
-export default function CartComponent(){
-
+export default function CartComponent({data}:any){
     return(
         <CartComponentContainer>
             <CartComponentLeft>
-                <StyledImg src="/assets/cart/image-xx59-headphones.jpg" />
+                <StyledImg src={data.image} />
                 <ProductInfoContainer>
-                    <ProductInfoHeading>XX99 MK II</ProductInfoHeading>
-                    <ProductInfoPrice>$2,999</ProductInfoPrice>
+                    <ProductInfoHeading>{data.name}</ProductInfoHeading>
+                    <ProductInfoPrice>$ {data.total}</ProductInfoPrice>
                 </ProductInfoContainer>
             </CartComponentLeft>
             <CartComponentRight>
-                <StyledInput type="number" />
+                <StyledInput defaultValue={data.quantity} type="number" />
             </CartComponentRight>
         </CartComponentContainer>
     )

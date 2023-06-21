@@ -13,6 +13,7 @@ export default function CategoryPageComponent({data}:any) {
     `;
     const ProductImg = styled.img`
         width: 100%;
+        cursor: pointer;
     `;
     const ProductDescriptionContainer = styled.div`
         width: 100%;
@@ -57,16 +58,15 @@ export default function CategoryPageComponent({data}:any) {
         border: none;
         letter-spacing: 0.25em;
     `;
-    const currentURL = `/products/details/${data.name}`
-    const cleanedURL = currentURL.replace(/ /g, '-');
     const handleLinkClick = () =>{
-        window.location.href = cleanedURL
+        const productURL = `/products/details/${data.slug}`
+        window.location.href = productURL
     }
     return (
         <>
             <ProductCategoryListContainer>
                 <ProductImageContainer>
-                    <ProductImg src={data.categoryImage.desktop} />
+                    <ProductImg onClick={handleLinkClick} src={data.categoryImage.desktop} />
                 </ProductImageContainer>
                 <ProductDescriptionContainer>
                     {data.new &&
