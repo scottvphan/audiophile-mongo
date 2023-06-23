@@ -12,15 +12,15 @@ const Backdrop = styled.div`
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: block;
-    z-index: 0;
+    z-index: 10;
 `;
 const CartContainer = styled.div`
     position: absolute;
-    top: 20%;
-    left: 67%;
+    top: 10%;
+    left: 65%;
     /* width:15%; */
     background-color: white;
-    z-index: 1;
+    z-index: 11;
     padding: 1rem;
     border-radius: 0.5rem;
 `;
@@ -43,10 +43,13 @@ const RemoveAll = styled.p`
     font-weight: 500;
     font-size: 15px;
     line-height: 25px;
-    text-decoration-line: underline;
     color: #000000;
     mix-blend-mode: normal;
     opacity: 0.5;
+    cursor:pointer;
+    &:hover{
+        text-decoration: underline;
+    }
 `;
 const TotalContainer = styled.div`
     display: flex;
@@ -80,6 +83,9 @@ const CheckoutButton = styled.button`
     border:none;
     width:100%;
     padding:0.8rem;
+    :disabled{
+        cursor:not-allowed;
+    }
 `;
 interface Cart {
     name: string;
@@ -87,12 +93,12 @@ interface Cart {
     quantity: string;
     total: number;
 }
-export default function CartModal({ cart, setCart }: any) {
+export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
     const [mappedData, setMappedData] = useState<any>("");
     const [totalPrice, setTotalPrice] = useState<any>(0);
     useEffect(() => {
         const mappeddata = Object.values(cart).map((data: any) => {
-            return <CartComponent key={uuidv4()} data={data} />;
+            return <CartComponent key={uuidv4()} cart={cart} setCart={setCart} data={data} />;
         });
         setMappedData(mappeddata);
         const total = Object.values(cart).reduce(
@@ -103,25 +109,44 @@ export default function CartModal({ cart, setCart }: any) {
             0
         );
         setTotalPrice(total);
-    }, [cart]);
+    }, [cart, setCart]);
     function removeAllItems() {
         setCart({});
+    }
+    function handleCloseModal(){
+        setIsCartOpen(false)
     }
     const cartLength = Object.values(cart).length;
     return (
         <>
-            <Backdrop />
+            <Backdrop onClick={handleCloseModal} />
             <CartContainer>
-                <TopContainer>
-                    <CartHeading>Cart ({cartLength})</CartHeading>
-                    <RemoveAll onClick={removeAllItems}>Remove All</RemoveAll>
-                </TopContainer>
-                <MappedContainer>{mappedData}</MappedContainer>
-                <TotalContainer>
-                    <TotalPrice>TOTAL</TotalPrice>
-                    <h4>$ {totalPrice}</h4>
-                </TotalContainer>
-                <CheckoutButton>Check Out</CheckoutButton>
+                {cartLength > 0 ?
+                    <>
+                        <TopContainer>
+                            <CartHeading>Cart ({cartLength})</CartHeading>
+                            <RemoveAll onClick={removeAllItems}>Remove All</RemoveAll>
+                        </TopContainer>
+                        <MappedContainer>{mappedData}</MappedContainer>
+                        <TotalContainer>
+                            <TotalPrice>TOTAL</TotalPrice>
+                            <h4>$ {totalPrice}</h4>
+                        </TotalContainer>
+                        <CheckoutButton onClick={() => {window.location.href = '/checkout'}}>Check Out</CheckoutButton>
+                    </>
+                :
+                <>
+                    <TopContainer>
+                        <CartHeading>Cart ({cartLength})</CartHeading>
+                    </TopContainer>
+                    <MappedContainer>{mappedData}</MappedContainer>
+                    <TotalContainer>
+                        <TotalPrice>TOTAL</TotalPrice>
+                        <h4>$ {totalPrice}</h4>
+                    </TotalContainer>
+                    <CheckoutButton disabled onClick={() => {window.location.href = '/checkout'}}>Check Out</CheckoutButton>
+                </>
+                }
             </CartContainer>
         </>
     );
