@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import ZX7image from '/assets/home/desktop/image-speaker-zx7.jpg';
-
-export default function ProductPreview(){
+import { Link } from "react-router-dom";
 
     const ProductPreviewContainer = styled.div`
         display:flex;
@@ -47,6 +46,7 @@ export default function ProductPreview(){
         background-color: #000000;
         color:white;
         padding:1rem;
+        border:none;
     `
     const ZX7Container = styled.div`
         border-radius:8px;
@@ -70,7 +70,7 @@ export default function ProductPreview(){
         color:black;
         font-weight:700;
         background: none;
-        width:40%;
+        width:100%;
     `
     const YX1DescriptionContainer = styled.section`
         width:50%;
@@ -95,6 +95,11 @@ export default function ProductPreview(){
         height:100%;
         border-radius:8px;
     `
+    const StyledLink = styled(Link)`
+        color:inherit;
+    `
+export default function ProductPreview(){
+
     return(
         <ProductPreviewContainer>
             <ZX9Container>
@@ -104,13 +109,17 @@ export default function ProductPreview(){
                 <ZX9DescriptionContainer>
                     <ZX9Header>ZX9 Speaker</ZX9Header>
                     <ZX9Description>Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound.</ZX9Description>
-                    <ZX9Button>SEE PRODUCT</ZX9Button>
+                    <StyledLink to={'/products/details/zx9-speaker'}>
+                        <ZX9Button>SEE PRODUCT</ZX9Button>
+                    </StyledLink>
                 </ZX9DescriptionContainer>
             </ZX9Container>
             <ZX7Container>
                 <ZX7DescriptionContainer>
                     <h2>ZX7 SPEAKER</h2>
-                    <ZX7Button>SEE PRODUCT</ZX7Button>
+                    <StyledLink to={'/products/details/zx7-speaker'}>
+                        <ZX7Button>SEE PRODUCT</ZX7Button>
+                    </StyledLink>
                 </ZX7DescriptionContainer>
             </ZX7Container>
             <YX1Container>
@@ -119,7 +128,9 @@ export default function ProductPreview(){
                 </StyledImgContainer>
                 <YX1DescriptionContainer>
                     <h2>YX1 EARPHONES</h2>
-                    <ZX7Button>SEE PRODUCT</ZX7Button>
+                    <StyledLink to={'/products/details/yx1-earphones'}>
+                        <ZX7Button>SEE PRODUCT</ZX7Button>
+                    </StyledLink>
                 </YX1DescriptionContainer>
             </YX1Container>
         </ProductPreviewContainer>
