@@ -7,20 +7,20 @@ import ProductCardList from "../components/ProductCardList";
 import {v4 as uuidv4} from 'uuid'
 import ScrollToTop from "../utils/ScrollToTop";
 
+const ProductCategoryContainer = styled.div`
+    margin-bottom: 2rem;
+`;
+const ProductCategoryHeader = styled.header`
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+`;
+const ProductHeading = styled.h1`
+    text-transform:uppercase;
+`
 export default function ProductCategoryPage(props: any) {
-    const ProductCategoryContainer = styled.div`
-        margin-bottom: 2rem;
-    `;
-    const ProductCategoryHeader = styled.header`
-        background-color: black;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-        margin-bottom: 2rem;
-    `;
-    const ProductHeading = styled.h1`
-        text-transform:uppercase;
-    `
     const [filteredData, setFilteredData] = useState<any>("");
     const [filteredDataLoaded, setFilteredDataLoaded] = useState(false);
     const [mappedData, setMappedData] = useState<any>("");

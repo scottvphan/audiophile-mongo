@@ -157,7 +157,6 @@ export default function ProductDetailPage(props: any) {
     const currentURL = window.location.pathname;
     const productName = currentURL
         .replace("/products/details/", "")
-    console.log(productName)
     const [filteredData, setFilteredData] = useState<any>("");
     const [filteredDataLoaded, setFilteredDataLoaded] = useState(false);
     const [mappedData, setMappedData] = useState<any>("");
