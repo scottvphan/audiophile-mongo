@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components"
+import ItemQuantityInput from "./ItemQuantityInput"
 
 const CartComponentContainer = styled.div`
     display:flex;
@@ -13,6 +14,9 @@ const CartComponentLeft = styled.div`
 `
 const CartComponentRight = styled.div`
     width:30%;
+    div{
+        width:45%;
+    }
 `
 const StyledImg = styled.img`
     width:64px;
@@ -42,23 +46,19 @@ const ProductInfoPrice = styled.p`
     padding:0;
     margin:0;
 `
-const StyledInput = styled.input`
-    height:100%;
-    width:100%;
-    text-align: center;
-`
-export default function CartComponent({data}:any){
+export default function CartComponent({ setCart, data}:any){
+    console.log(data)
     return(
         <CartComponentContainer>
             <CartComponentLeft>
                 <StyledImg src={data.image} />
                 <ProductInfoContainer>
                     <ProductInfoHeading>{data.name}</ProductInfoHeading>
-                    <ProductInfoPrice>$ {data.total}</ProductInfoPrice>
+                    <ProductInfoPrice>$ {data.price}</ProductInfoPrice>
                 </ProductInfoContainer>
             </CartComponentLeft>
             <CartComponentRight>
-                <StyledInput defaultValue={data.quantity} type="number" />
+                <ItemQuantityInput setCart={setCart} data={data} id={data.id} quantity={data.quantity} price={data.price} />
             </CartComponentRight>
         </CartComponentContainer>
     )

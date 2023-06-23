@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useLayoutContext } from "./Layout";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useLayoutOutletContext } from "./Layout";
+import ItemQuantityInput from "./ItemQuantityInput";
 
 const ProductDetail = styled.div`
     display: flex;
@@ -61,9 +61,13 @@ const ProductButton = styled.button`
 const InputContainer = styled.div`
     display: flex;
     gap: 1rem;
-`;
-const Input = styled.input`
-    width: 40%;
+    width:60%;
+    div{
+        width:45%;
+    }
+    button{
+        width:55%;
+    }
 `;
 const FeaturesContainer = styled.div`
     display: flex;
@@ -179,9 +183,8 @@ export default function ProductDetails(props: any) {
     const [mappedList, setMappedList] = useState<any>("");
     const [mappedListLoaded, setMappedListLoaded] = useState<boolean>(false);
     const [mappedRecommended, setMappedRecommended] = useState<any>("");
-    const { cart, setCart } = useLayoutContext();
+    const { cart, setCart } = useLayoutOutletContext();
     const [itemAmount, setItemAmount] = useState<number>(0);
-    const { isAuthenticated, user } = useAuth0();
 
     useEffect(() => {
         const mappedData = data.includes.map((data: any) => {
@@ -221,7 +224,9 @@ export default function ProductDetails(props: any) {
                     name: data.name,
                     image: `/assets/cart/image-${data.slug}.jpg`,
                     quantity: itemAmount,
+                    price: data.price,
                     total: data.price * itemAmount,
+                    id: data.id,
                 },
             });
         }
@@ -230,20 +235,6 @@ export default function ProductDetails(props: any) {
         const productURL = `/products/details/${productData}`
         window.location.href = productURL
     }
-
-    useEffect(() => {
-        if (!isAuthenticated) {
-            if (JSON.stringify(cart) !== sessionStorage.getItem("cart")) {
-                sessionStorage.setItem("cart", JSON.stringify(cart));
-            }
-        } else {
-            if (
-                JSON.stringify(cart) !== localStorage.getItem(`${user?.email}`)
-            ) {
-                localStorage.setItem(`${user?.email}`, JSON.stringify(cart));
-            }
-        }
-    }, [cart, isAuthenticated, user?.email]);
 
     return (
         <>
@@ -264,13 +255,7 @@ export default function ProductDetails(props: any) {
                     <ProductDescription>{data.description}</ProductDescription>
                     <h2>{"$ " + data.price}</h2>
                     <InputContainer>
-                        <Input
-                            onChange={(event: any) => {
-                                const value = event.target.value;
-                                setItemAmount(value);
-                            }}
-                            type="number"
-                        />
+                        <ItemQuantityInput setItemAmount={setItemAmount} />
                         <ProductButton onClick={addToCart}>
                             Add To Cart
                         </ProductButton>
