@@ -8,4 +8,6 @@ export const schema = z.object({
     zipcode: z.string().min(4, 'Zipcode must be at least 4 characters'),
     city: z.string().min(2, 'City must be at least 2 characters'),
     country: z.string().min(2, 'Country must be at least 2 characters'),
+    eMoneyNumber: z.string(),
+    eMoneyPin: z.string(),
 });
