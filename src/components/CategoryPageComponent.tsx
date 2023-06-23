@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components";
 
-export default function CategoryPageComponent({data}:any) {
     const ProductCategoryListContainer = styled.div`
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -58,6 +57,7 @@ export default function CategoryPageComponent({data}:any) {
         border: none;
         letter-spacing: 0.25em;
     `;
+export default function CategoryPageComponent({data}:any) {
     const handleLinkClick = () =>{
         const productURL = `/products/details/${data.slug}`
         window.location.href = productURL

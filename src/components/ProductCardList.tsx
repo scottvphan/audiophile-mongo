@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
 import { Link } from "react-router-dom";
-export default function ProductCardList() {
     const ProductListContainer = styled.div`
         background-color: white;
     `;
@@ -49,6 +48,7 @@ export default function ProductCardList() {
         position:relative;
         width:100%;
     `
+export default function ProductCardList() {
     return (
         <ProductListContainer>
             <CardListContainer>
