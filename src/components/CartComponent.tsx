@@ -14,9 +14,6 @@ const CartComponentLeft = styled.div`
 `
 const CartComponentRight = styled.div`
     width:30%;
-    div{
-        width:45%;
-    }
 `
 const StyledImg = styled.img`
     width:64px;

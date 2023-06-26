@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styled from "styled-components";
-import { schema } from "../utils/Schema";
+import { HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import SVG from "react-inlinesvg/esm";
+import { z } from "zod";
 
 interface FormInputs {
     name: string;
@@ -17,12 +18,18 @@ interface FormInputs {
     country: string;
     eMoney: boolean;
     cash: boolean;
+    credit: boolean;
     eMoneyNumber: string;
     eMoneyPin: string;
 }
 
 interface InputContainerProps {
     stretch?: boolean;
+}
+
+interface PaymentMethodInputContainerProps
+    extends HTMLAttributes<HTMLDivElement> {
+    checked?: boolean;
 }
 
 const FormHeadings = styled.h6`
@@ -101,11 +108,10 @@ const PaymentMethodInput = styled.input`
         accent-color: #d87d4a;
     }
     &:focus {
-        outline: none;
+        outline: #d87d4a;
     }
 `;
-const PaymentMethodInputContainer = styled.div`
-    border: 1px solid #cfcfcf;
+const PaymentMethodInputContainer = styled.div<PaymentMethodInputContainerProps>`
     border-radius: 0.5rem;
     height: 100%;
     box-sizing: border-box;
@@ -113,6 +119,15 @@ const PaymentMethodInputContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
+    border: 1px solid ${(props: any) => (props.checked ? "#d87d4a" : "#cfcfcf")};
+    cursor: pointer;
+    &:focus-within {
+        outline: 1px solid #d87d4a;
+        border: none;
+    }
+    input {
+        accent-color: #d87d4a;
+    }
 `;
 const PaymentMethodLabel = styled.label`
     font-weight: 700;
@@ -120,6 +135,7 @@ const PaymentMethodLabel = styled.label`
     line-height: 19px;
     letter-spacing: -0.25px;
     color: black;
+    cursor: pointer;
 `;
 const ErrorMessage = styled(StyledLabel)`
     color: red;
@@ -129,14 +145,14 @@ const EMoneyContainer = styled(BillingDetailsContainer)`
     margin: 2rem 0;
 `;
 const CashContainer = styled.div`
-    display:flex;
+    display: flex;
     align-items: center;
-    gap:1rem;
-    margin:1rem 0;
+    gap: 1rem;
+    margin: 1rem 0;
 `;
 const CashSVG = styled(SVG)`
     cursor: default;
-    width:10%;
+    width: 10%;
 `;
 const CashText = styled.p`
     color: #000;
@@ -145,20 +161,46 @@ const CashText = styled.p`
     font-weight: 500;
     line-height: 25px;
     opacity: 0.5;
-`
+`;
 const CheckoutHeading = styled.h1`
-    margin:0;
-`
-export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
+    margin: 0;
+`;
+export default function CheckoutForm({
+    setFormData,
+    setIsCheckoutModalOpen,
+}: any) {
+    const [isCreditSelected, setIsCreditSelected] = useState<boolean>(false);
+    const [isCashSelected, setIsCashSelected] = useState<boolean>(false);
+
+    const schema = z.object({
+        name: z.string().min(2, "Name must be at least 2 characters"),
+        email: z.string().email("Invalid email address"),
+        phoneNumber: z
+            .string()
+            .regex(/^\+?[0-9]{6,}$/i, "Invalid phone number"),
+        address: z.string().min(5, "Address must be at least 5 characters"),
+        zipcode: z.string().min(4, "Zipcode must be at least 4 characters"),
+        city: z.string().min(2, "City must be at least 2 characters"),
+        country: z.string().min(2, "Country must be at least 2 characters"),
+        ...(isCashSelected && {
+            // cash: z.boolean(),
+        }),
+        ...(isCreditSelected && {
+            // credit: z.boolean(),
+            eMoneyNumber: z.string().length(16, "Invalid Credit Card Number"),
+            eMoneyPin: z.string().min(3, "Invalid Pin"),
+        }),
+    });
+
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
-    const [isCreditSelected, setIsCreditSelected] = useState<boolean>(false);
-    const [isCashSelected, setIsCashSelected] = useState<boolean>(false);
+
     const handleCreditSelection = () => {
         setIsCreditSelected(true);
         setIsCashSelected(false);
@@ -168,11 +210,16 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
         setIsCreditSelected(false);
         setIsCashSelected(true);
     };
+    const onSubmit = (data: FormInputs): void => {
+        setFormData(data);
+        setIsCheckoutModalOpen((prevCheckout: any) => !prevCheckout);
+        reset();
+    };
 
     return (
         <>
             <CheckoutHeading>Checkout</CheckoutHeading>
-            <form ref={forwardedRef} onSubmit={handleSubmit(onSubmit)}>
+            <form id={"hook-form"} onSubmit={handleSubmit(onSubmit)}>
                 <FormHeadings>Billing Details</FormHeadings>
                 <BillingDetailsContainer>
                     <InputContainer>
@@ -180,7 +227,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             <StyledLabel htmlFor="name">Name</StyledLabel>
                             {errors.name && (
                                 <ErrorMessage htmlFor="name">
-                                    Error
+                                    {errors.name.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -198,7 +245,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             </StyledLabel>
                             {errors.email && (
                                 <ErrorMessage htmlFor="email">
-                                    Error
+                                    {errors.email.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -216,7 +263,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             </StyledLabel>
                             {errors.phoneNumber && (
                                 <ErrorMessage htmlFor="phone">
-                                    Error
+                                    {errors.phoneNumber.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -235,7 +282,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             <StyledLabel htmlFor="address">Address</StyledLabel>
                             {errors.address && (
                                 <ErrorMessage htmlFor="address">
-                                    Error
+                                    {errors.address.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -253,8 +300,8 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                                 ZIP Code
                             </StyledLabel>
                             {errors.zipcode && (
-                                <ErrorMessage htmlFor="email">
-                                    Error
+                                <ErrorMessage htmlFor="zipcode">
+                                    {errors.zipcode.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -272,7 +319,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             </StyledLabel>
                             {errors.city && (
                                 <ErrorMessage htmlFor="city">
-                                    Error
+                                    {errors.city.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -288,7 +335,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             <StyledLabel htmlFor="country">Country</StyledLabel>
                             {errors.country && (
                                 <ErrorMessage htmlFor="country">
-                                    Error
+                                    {errors.country.message}
                                 </ErrorMessage>
                             )}
                         </LabelContainer>
@@ -307,8 +354,13 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             <h5>Payment Method</h5>
                         </PaymentMethodLeftContainer>
                         <PaymentMethodRightContainer>
-                            <PaymentMethodInputContainer>
+                            <PaymentMethodInputContainer
+                                onClick={handleCreditSelection}
+                                checked={isCreditSelected}
+                            >
                                 <PaymentMethodInput
+                                    {...register("credit")}
+                                    name="credit"
                                     type="radio"
                                     id="e-money"
                                     onChange={handleCreditSelection}
@@ -318,8 +370,13 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                                     e-Money
                                 </PaymentMethodLabel>
                             </PaymentMethodInputContainer>
-                            <PaymentMethodInputContainer>
+                            <PaymentMethodInputContainer
+                                onClick={handleCashSelection}
+                                checked={isCashSelected}
+                            >
                                 <PaymentMethodInput
+                                    {...register("cash")}
+                                    name="cash"
                                     type="radio"
                                     id="cash"
                                     onChange={handleCashSelection}
@@ -340,7 +397,7 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                                     </StyledLabel>
                                     {errors.eMoneyNumber && (
                                         <ErrorMessage htmlFor="eMoneyNumber">
-                                            Error
+                                            {errors.eMoneyNumber?.message}
                                         </ErrorMessage>
                                     )}
                                 </LabelContainer>
@@ -357,11 +414,11 @@ export default function CheckoutForm({ onSubmit, forwardedRef }: any) {
                             <InputContainer>
                                 <LabelContainer>
                                     <StyledLabel htmlFor="eMoneyPin">
-                                        e-Money Number
+                                        e-Money Pin
                                     </StyledLabel>
                                     {errors.eMoneyPin && (
                                         <ErrorMessage htmlFor="eMoneyPin">
-                                            Error
+                                            {errors.eMoneyPin?.message}
                                         </ErrorMessage>
                                     )}
                                 </LabelContainer>

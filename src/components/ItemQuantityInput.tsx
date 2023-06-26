@@ -9,7 +9,6 @@ const InputContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
 `;
 const InputAmount = styled.div`
     color: #000;
@@ -30,13 +29,19 @@ const InputIcons = styled.p`
     text-transform: uppercase;
     opacity: 0.25;
     transition: 0.3s;
-    &:hover {
-        color: #d87d4a;
-        transition: 0.3s;
-        opacity: 1;
-        cursor: pointer;
-    }
     user-select: none;
+`;
+const InputIconContainer = styled.div`
+    width: 100%;
+    cursor: pointer;
+    &:hover {
+        p {
+            color: #d87d4a;
+            transition: 0.3s;
+            opacity: 1;
+            cursor: pointer;
+        }
+    }
 `;
 export default function ItemQuantityInput({
     id,
@@ -45,7 +50,9 @@ export default function ItemQuantityInput({
     setItemAmount,
     setCart,
 }: any) {
-    const [currentQuantity, setCurrentQuantity] = useState<number>(setCart ? +quantity : 0);
+    const [currentQuantity, setCurrentQuantity] = useState<number>(
+        setCart ? +quantity : 0
+    );
     const prevQuantityRef = useRef<number>(currentQuantity);
 
     function handleMinus() {
@@ -72,22 +79,30 @@ export default function ItemQuantityInput({
                 prevQuantityRef.current = currentQuantity;
             }
         }
-        if(setItemAmount){
-            setItemAmount(currentQuantity)
+        if (setItemAmount) {
+            setItemAmount(currentQuantity);
         }
     }, [currentQuantity, id, setCart, price, setItemAmount]);
-    
+
     return setCart ? (
         <InputContainer>
-            <InputIcons onClick={handleMinus}>-</InputIcons>
+            <InputIconContainer onClick={handleMinus}>
+                <InputIcons>-</InputIcons>
+            </InputIconContainer>
             <InputAmount>{quantity ? currentQuantity : 0}</InputAmount>
-            <InputIcons onClick={handleAdd}>+</InputIcons>
+            <InputIconContainer onClick={handleAdd}>
+                <InputIcons>+</InputIcons>
+            </InputIconContainer>
         </InputContainer>
     ) : (
         <InputContainer>
-            <InputIcons onClick={handleMinus}>-</InputIcons>
+            <InputIconContainer onClick={handleMinus}>
+                <InputIcons>-</InputIcons>
+            </InputIconContainer>
             <InputAmount>{currentQuantity}</InputAmount>
-            <InputIcons onClick={handleAdd}>+</InputIcons>
+            <InputIconContainer onClick={handleAdd}>
+                <InputIcons>+</InputIcons>
+            </InputIconContainer>
         </InputContainer>
     );
 }

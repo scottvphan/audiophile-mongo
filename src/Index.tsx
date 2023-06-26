@@ -20,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         font-family:'Manrope', Arial, Helvetica, sans-serif;
+        scroll-behavior: smooth;
     }
     button {
         font-family:'Manrope', Arial, Helvetica, sans-serif;
@@ -28,20 +29,7 @@ const GlobalStyle = createGlobalStyle`
     input{
         font-family:'Manrope', Arial, Arial, Helvetica, sans-serif
     }
-    SVG {
-        cursor: pointer;
-        path{
-            transition:0.3s;
-        }
-        &:hover{
-            path{
-                transition:0.3s;
-                fill:#D87D4A;
-            }
-        }
-        user-select: none;
-    }
-    img{
+    img, SVG{
         user-select: none;
     }
 `;

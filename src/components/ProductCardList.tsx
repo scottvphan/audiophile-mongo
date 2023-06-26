@@ -3,6 +3,7 @@ import SVG from "react-inlinesvg";
 import { Link } from "react-router-dom";
     const ProductListContainer = styled.div`
         background-color: white;
+        margin:2rem 0;
     `;
     const ProductCard = styled(Link)`
         background: #f1f1f1;
@@ -12,11 +13,15 @@ import { Link } from "react-router-dom";
         width: 100%;
         text-decoration: none;
         color: inherit;
+        transition:0.3s;
+        &:hover{
+            transform:scale(1.1);
+            transition:0.3s;
+        }
     `;
     const CardListContainer = styled.div`
         display: flex;
         justify-content: space-between;
-        padding: 1rem 20rem;
         gap: 2rem;
     `;
     const ProductCardHeading = styled.h1`

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components";
+import { OrangeButton, UnStyledLink } from "./StyledComponents";
 
     const ProductCategoryListContainer = styled.div`
         display: grid;
         grid-template-columns: 1fr 1fr;
-        padding: 0 20rem;
         gap: 5rem;
     `;
     const ProductImageContainer = styled.div`
@@ -13,6 +13,11 @@ import styled from "styled-components";
     const ProductImg = styled.img`
         width: 100%;
         cursor: pointer;
+        transition:0.3s;
+        &:hover{
+            transition:0.3s;
+            transform: scale(1.05);
+        }
     `;
     const ProductDescriptionContainer = styled.div`
         width: 100%;
@@ -21,6 +26,9 @@ import styled from "styled-components";
         flex-direction: column;
         justify-content: space-evenly;
         align-items: flex-start;
+        button{
+            width:30%;
+        }
     `;
     const ProductDescriptionNewTag = styled.h6`
         font-style: normal;
@@ -49,24 +57,15 @@ import styled from "styled-components";
         mix-blend-mode: normal;
         opacity: 0.5;
     `;
-    const ProductButton = styled.button`
-        background: #d87d4a;
-        padding: 1rem;
-        color: white;
-        font-weight: 700;
-        border: none;
-        letter-spacing: 0.25em;
-    `;
 export default function CategoryPageComponent({data}:any) {
-    const handleLinkClick = () =>{
-        const productURL = `/products/details/${data.slug}`
-        window.location.href = productURL
-    }
+
     return (
         <>
             <ProductCategoryListContainer>
                 <ProductImageContainer>
-                    <ProductImg onClick={handleLinkClick} src={data.categoryImage.desktop} />
+                    <UnStyledLink to={`/products/details/${data.slug}`}>
+                        <ProductImg src={data.categoryImage.desktop} />
+                    </UnStyledLink>
                 </ProductImageContainer>
                 <ProductDescriptionContainer>
                     {data.new &&
@@ -80,7 +79,9 @@ export default function CategoryPageComponent({data}:any) {
                     <ProductDescription>
                         {data.description}
                     </ProductDescription>
-                    <ProductButton onClick={handleLinkClick}>See Product</ProductButton>
+                    <UnStyledLink to={`/products/details/${data.slug}`}>
+                        <OrangeButton>See Product</OrangeButton>
+                    </UnStyledLink>
                 </ProductDescriptionContainer>
             </ProductCategoryListContainer>
         </>

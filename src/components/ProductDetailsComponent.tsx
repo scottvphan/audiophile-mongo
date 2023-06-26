@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useLayoutOutletContext } from "./Layout";
 import ItemQuantityInput from "./ItemQuantityInput";
+import GoBackButton from "./GoBackButton";
+import { OrangeButton } from "./StyledComponents";
 
 const ProductDetail = styled.div`
     display: flex;
@@ -50,14 +52,6 @@ const ProductDescription = styled.p`
     mix-blend-mode: normal;
     opacity: 0.5;
 `;
-const ProductButton = styled.button`
-    background: #d87d4a;
-    padding: 1rem;
-    color: white;
-    font-weight: 700;
-    border: none;
-    letter-spacing: 0.25em;
-`;
 const InputContainer = styled.div`
     display: flex;
     gap: 1rem;
@@ -70,8 +64,9 @@ const InputContainer = styled.div`
     }
 `;
 const FeaturesContainer = styled.div`
-    display: flex;
     gap: 5rem;
+    display:flex;
+    margin: 2rem 0;
 `;
 const FeatureContainer = styled.div`
     width: 60%;
@@ -95,7 +90,8 @@ const FeaturesText = styled.p`
     opacity: 0.5;
 `
 const InTheBoxContainer = styled.div`
-    width: 15%;
+    width: 40%;
+    display:grid;
 `;
 const InTheBoxListContainer = styled.div`
     display: flex;
@@ -108,6 +104,7 @@ const InTheBoxAmount = styled.h6`
     font-size: 15px;
     line-height: 25px;
     color: #d87d4a;
+    margin:0;
 `;
 const InTheBoxItem = styled.p`
     font-weight: 500;
@@ -116,6 +113,7 @@ const InTheBoxItem = styled.p`
     color: #000000;
     mix-blend-mode: normal;
     opacity: 0.5;
+    margin:0;
 `;
 const ImageGalleryContainer = styled.div`
     display: grid;
@@ -151,17 +149,13 @@ const RecommendationImage = styled.img`
     width: 100%;
     border-radius: 0.5rem;
 `;
-const RecommendationButton = styled.div`
-    background-color: #d87d4a;
-    padding: 0.5rem;
-    color: white;
-    text-align: center;
-    cursor: pointer;
-`;
 const RecommendationCard = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    button{
+        width:40%;
+    }
 `;
 const RecommendationCardHeading = styled.h4`
     font-style: normal;
@@ -172,18 +166,13 @@ const RecommendationCardHeading = styled.h4`
     text-transform: uppercase;
     color: #000000;
 `;
-const StyledLink = styled(Link)`
-    text-decoration: none;
-    font-weight: 700;
-    color: #d87d4a;
-`;
 
 export default function ProductDetails(props: any) {
     const data = props.data;
     const [mappedList, setMappedList] = useState<any>("");
     const [mappedListLoaded, setMappedListLoaded] = useState<boolean>(false);
     const [mappedRecommended, setMappedRecommended] = useState<any>("");
-    const { cart, setCart } = useLayoutOutletContext();
+    const { cart, setCart, setIsCartOpen } = useLayoutOutletContext();
     const [itemAmount, setItemAmount] = useState<number>(0);
 
     useEffect(() => {
@@ -209,7 +198,7 @@ export default function ProductDetails(props: any) {
                     <RecommendationCardHeading>
                         {data.name}
                     </RecommendationCardHeading>
-                    <RecommendationButton onClick={() => handleLinkClick(data.slug)}>SEE PRODUCT</RecommendationButton>
+                    <OrangeButton onClick={() => handleLinkClick(data.slug)}>SEE PRODUCT</OrangeButton>
                 </RecommendationCard>
             );
         });
@@ -229,7 +218,9 @@ export default function ProductDetails(props: any) {
                     id: data.id,
                 },
             });
-        }
+            setIsCartOpen(true)
+            window.scrollTo(0, 0);
+    }
     }
     const handleLinkClick = (productData:string) =>{
         const productURL = `/products/details/${productData}`
@@ -238,7 +229,7 @@ export default function ProductDetails(props: any) {
 
     return (
         <>
-            <StyledLink to={"/"}>Go Back</StyledLink>
+            <GoBackButton />
             <ProductDetail>
                 <ProductImageContainer>
                     <ProductImg src={data.image.desktop} />
@@ -256,9 +247,9 @@ export default function ProductDetails(props: any) {
                     <h2>{"$ " + data.price}</h2>
                     <InputContainer>
                         <ItemQuantityInput setItemAmount={setItemAmount} />
-                        <ProductButton onClick={addToCart}>
-                            Add To Cart
-                        </ProductButton>
+                        <OrangeButton onClick={addToCart}>
+                            ADD TO CART
+                        </OrangeButton>
                     </InputContainer>
                 </ProductDescriptionContainer>
             </ProductDetail>

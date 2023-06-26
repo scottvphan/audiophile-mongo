@@ -2,9 +2,9 @@
 import styled from "styled-components";
 import CheckoutForm from "../components/CheckoutForm";
 import CheckoutSummary from "../components/CheckoutSummary";
-import { Link } from "react-router-dom";
-import { useForm, SubmitHandler } from "react-hook-form"
-import { useRef } from "react";
+import { useLayoutOutletContext } from "../components/Layout";
+import GoBackButton from "../components/GoBackButton";
+// import { useState, useEffect } from 'react'
 
 const CheckoutPageContainer = styled.div`
     padding: 1rem 20rem;
@@ -27,48 +27,22 @@ const CheckoutSummaryContainer = styled.div`
     padding: 1rem;
     border-radius: 0.5rem;
     align-self: flex-start;
-`;
-const StyledLink = styled(Link)`
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 25px;
-    color: #000000;
-    mix-blend-mode: normal;
-    opacity: 0.5;
-    transition:0.15s;
-    text-decoration: none;
-    &:hover{
-        transition:0.15s;
-        color:#D87D4A;
+    button{
+        margin:1rem 0;
     }
 `;
-interface FormValues {
-    name: string;
-    email: string;
-    phoneNumber: string;
-    address: string;
-    zipcode: number;
-    city: string;
-    country: string;
-    // eMoney: boolean;
-    // cash: boolean;
-    eMoneyNumber: string;
-    eMoneyPin: string;
-}
 
 export default function CheckoutPage() {
-    const formRef = useRef();
-    const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
-
+    const { formData, setFormData, setIsCheckoutModalOpen } = useLayoutOutletContext()
     return (
         <CheckoutPageContainer>
-            <StyledLink to={'..'}>Go Back</StyledLink>
+            <GoBackButton />
             <CheckoutContainer>
                 <CheckoutFormContainer>
-                    <CheckoutForm forwardedRef={formRef} onSubmit = {onSubmit} />
+                    <CheckoutForm formData={formData} setFormData={setFormData} setIsCheckoutModalOpen={setIsCheckoutModalOpen}  />
                 </CheckoutFormContainer>
                 <CheckoutSummaryContainer>
-                    <CheckoutSummary onSubmit = {onSubmit} formRef={formRef} />
+                    <CheckoutSummary />
                 </CheckoutSummaryContainer>
             </CheckoutContainer>
         </CheckoutPageContainer>

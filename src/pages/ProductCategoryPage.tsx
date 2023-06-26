@@ -6,9 +6,11 @@ import { useLocation } from "react-router-dom";
 import ProductCardList from "../components/ProductCardList";
 import {v4 as uuidv4} from 'uuid'
 import ScrollToTop from "../utils/ScrollToTop";
+import AdComponent from "../components/AdComponent";
 
 const ProductCategoryContainer = styled.div`
-    margin-bottom: 2rem;
+    padding:0 20rem;
+    margin: 4rem 0;
 `;
 const ProductCategoryHeader = styled.header`
     background-color: black;
@@ -19,6 +21,10 @@ const ProductCategoryHeader = styled.header`
 `;
 const ProductHeading = styled.h1`
     text-transform:uppercase;
+`
+const ProductCardContainer = styled.div`
+    display:grid;
+    gap:2rem;
 `
 export default function ProductCategoryPage(props: any) {
     const [filteredData, setFilteredData] = useState<any>("");
@@ -48,19 +54,24 @@ export default function ProductCategoryPage(props: any) {
         }
     }, [filteredData, filteredDataLoaded]);
     return (
-        <ProductCategoryContainer>
-            {mappedDataLoaded ? (
-                <>
-                    <ScrollToTop />
-                    <ProductCategoryHeader>
-                        <ProductHeading>{window.location.pathname.replace('/products/', '')}</ProductHeading>
-                    </ProductCategoryHeader>
-                    {mappedData}
-                    <ProductCardList />
-                </>
-            ) : (
-                <h1>Empty</h1>
-            )}
-        </ProductCategoryContainer>
+        <>
+            <ScrollToTop />
+            <ProductCategoryHeader>
+                <ProductHeading>{window.location.pathname.replace('/products/', '')}</ProductHeading>
+            </ProductCategoryHeader>
+            <ProductCategoryContainer>
+                {mappedDataLoaded ? (
+                    <>
+                        <ProductCardContainer>
+                            {mappedData}
+                        </ProductCardContainer>
+                        <ProductCardList />
+                    </>
+                ) : (
+                    <h1>Empty</h1>
+                )}
+                <AdComponent />
+            </ProductCategoryContainer>
+        </>
     );
 }

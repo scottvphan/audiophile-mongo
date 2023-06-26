@@ -5,9 +5,15 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CartModal from "./CartModal";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Backdrop } from "./StyledComponents";
+import CheckoutModal from "./CheckoutModal";
+
 export default function Layout() {
-    const { isAuthenticated, user, isLoading } = useAuth0();
-    
+    const { isAuthenticated, user } = useAuth0();
+    const [formData, setFormData] = useState<any>("");
+    const [isCheckoutModalOpen, setIsCheckoutModalOpen] =
+        useState<boolean>(false);
+
     const [cart, setCart] = useState<any>(
         isAuthenticated
             ? JSON.parse(localStorage.getItem(`${user?.email}`) ?? "{}")
@@ -20,8 +26,8 @@ export default function Layout() {
                 sessionStorage.setItem("cart", JSON.stringify(cart));
             }
         } else {
-            sessionStorage.clear()
-            console.log('authenticated')
+            sessionStorage.clear();
+            console.log("authenticated");
             if (
                 JSON.stringify(cart) !== localStorage.getItem(`${user?.email}`)
             ) {
@@ -37,11 +43,25 @@ export default function Layout() {
         isCartOpen: isCartOpen,
         setIsCartOpen: setIsCartOpen,
     };
+
     return (
         <>
+            {isCartOpen || isCheckoutModalOpen && <Backdrop />}
+            {isCheckoutModalOpen && <CheckoutModal cart={cart} setIsCheckoutModalOpen={setIsCheckoutModalOpen} setCart={setCart} />}
             <Navbar {...NavbarProps} />
             {isCartOpen && <CartModal {...NavbarProps} />}
-            <Outlet context={{ cart, setCart, isCartOpen, setIsCartOpen }} />
+            <Outlet
+                context={{
+                    cart,
+                    setCart,
+                    isCartOpen,
+                    setIsCartOpen,
+                    formData,
+                    setFormData,
+                    isCheckoutModalOpen,
+                    setIsCheckoutModalOpen,
+                }}
+            />
             <Footer />
         </>
     );

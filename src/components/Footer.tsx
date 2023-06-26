@@ -1,18 +1,19 @@
-import SVG from "react-inlinesvg";
 import styled from "styled-components";
+import SVG from "react-inlinesvg";
 import { Link } from "react-router-dom";
+import { StyledSVG } from "./StyledComponents";
+import logo from "/assets/shared/desktop/logo.svg";
 
 const Footer = styled.footer`
     background-color: black;
-    /* background-color: #101010; */
     color: white;
 `;
 const LinkContainer = styled.div`
     display: flex;
-    gap: 20px;
+    gap: 2.5rem;
 `;
 const FooterContainer = styled.div`
-    padding: 0rem 20rem;
+    padding: 2rem 20rem;
     display: flex;
     flex-direction: column;
 `;
@@ -21,9 +22,13 @@ const StyledLink = styled(Link)`
     font-weight: 700;
     text-decoration: none;
     transition: 0.3s;
+    transform:scale(1);
+    letter-spacing:2px;
     &:hover {
         color: #d87d4a;
         transition: 0.3s;
+        transform:scale(1.1);
+        letter-spacing:4px;
     }
 `;
 const LeftContainer = styled.div`
@@ -58,7 +63,7 @@ export default function Navbar() {
         <Footer>
             <FooterContainer>
                 <TopFooterContainer>
-                    <h1>audiophile</h1>
+                    <SVG src={logo} />
                     <LinkContainer>
                         <StyledLink to="/">HOME</StyledLink>
                         <StyledLink to="/products/headphones">
@@ -86,9 +91,9 @@ export default function Navbar() {
                         </StyledParagraph>
                     </LeftContainer>
                     <RightContainer>
-                        <SVG src="/assets/facebook.svg"></SVG>
-                        <SVG src="/assets/twitter.svg"></SVG>
-                        <SVG src="/assets/instagram.svg"></SVG>
+                        <StyledSVG src="/assets/facebook.svg"></StyledSVG>
+                        <StyledSVG src="/assets/twitter.svg"></StyledSVG>
+                        <StyledSVG src="/assets/instagram.svg"></StyledSVG>
                     </RightContainer>
                 </BottomFooterContainer>
             </FooterContainer>
