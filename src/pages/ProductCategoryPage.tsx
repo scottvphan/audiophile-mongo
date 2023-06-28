@@ -11,6 +11,12 @@ import AdComponent from "../components/AdComponent";
 const ProductCategoryContainer = styled.div`
     padding:0 20rem;
     margin: 4rem 0;
+    @media screen and (max-width:1440px) {
+        padding: 0rem 5rem;
+    }
+    @media screen and (max-width:1024px) {
+        padding: 0rem 2rem;
+    }
 `;
 const ProductCategoryHeader = styled.header`
     background-color: black;

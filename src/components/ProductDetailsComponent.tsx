@@ -10,20 +10,41 @@ import { OrangeButton } from "./StyledComponents";
 
 const ProductDetail = styled.div`
     display: flex;
+    grid-template-columns: 1fr 1fr;
+    @media screen and (max-width: 768px){
+        flex-direction: column;
+    }
+    box-sizing: border-box;
+    overflow: hidden;
 `;
 const ProductImageContainer = styled.div`
     width: 100%;
+    /* height:100%; */
+    box-sizing: border-box;
 `;
 const ProductImg = styled.img`
     width: 100%;
+    /* height:100%; */
+    box-sizing: border-box;
+`;
+const ProductImgSource = styled.source`
+    width: 100%;
+    height:100%;
 `;
 const ProductDescriptionContainer = styled.div`
-    width: 100%;
+    /* width: 100%; */
     padding: 3rem;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
+    /* @media screen and (max-width: 560px) {
+        padding: 0;
+    } */
+    box-sizing:border-box;
+    @media screen and (max-width:560px) {
+        padding:1rem;
+    }
 `;
 const ProductDescriptionNewTag = styled.h6`
     font-style: normal;
@@ -42,6 +63,9 @@ const ProductDescriptionHeading = styled.h1`
     letter-spacing: 1.42857px;
     text-transform: uppercase;
     color: #000000;
+    @media screen and (max-width:560px) {
+        font-size:1.5rem;
+    }
 `;
 const ProductDescription = styled.p`
     font-style: normal;
@@ -55,21 +79,36 @@ const ProductDescription = styled.p`
 const InputContainer = styled.div`
     display: flex;
     gap: 1rem;
-    width:60%;
-    div{
-        width:45%;
+    width: 60%;
+    div {
+        width: 45%;
     }
-    button{
-        width:55%;
+    button {
+        width: 55%;
+    }
+    @media screen and (max-width:768px) {
+        width:100%;
+        button{
+            width: 100%;
+        }
+        div{
+            width:100%;
+        }
     }
 `;
 const FeaturesContainer = styled.div`
-    gap: 5rem;
-    display:flex;
-    margin: 2rem 0;
+    gap: 0 5rem;
+    display: flex;
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+        gap:1rem;
+    }
 `;
 const FeatureContainer = styled.div`
-    width: 60%;
+    width:70%;
+    @media screen and (max-width: 560px) {
+        width: 100%;
+    }
 `;
 const FeaturesHeading = styled.h1`
     font-style: normal;
@@ -79,7 +118,7 @@ const FeaturesHeading = styled.h1`
     letter-spacing: 1.14286px;
     text-transform: uppercase;
     color: #000000;
-`
+`;
 const FeaturesText = styled.p`
     font-style: normal;
     font-weight: 500;
@@ -88,23 +127,28 @@ const FeaturesText = styled.p`
     color: #000000;
     mix-blend-mode: normal;
     opacity: 0.5;
-`
+`;
 const InTheBoxContainer = styled.div`
-    width: 40%;
-    display:grid;
+    display: grid;
+    width: 30%;
+    box-sizing: border-box;
+    margin:1em 0;
+    @media screen and (max-width:768px) {
+        width:100%;
+    }
 `;
 const InTheBoxListContainer = styled.div`
     display: flex;
     gap: 0 1rem;
     align-items: center;
-    height:5%;
+    height: 5%;
 `;
 const InTheBoxAmount = styled.h6`
     font-weight: 700;
     font-size: 15px;
     line-height: 25px;
     color: #d87d4a;
-    margin:0;
+    margin: 0;
 `;
 const InTheBoxItem = styled.p`
     font-weight: 500;
@@ -113,7 +157,7 @@ const InTheBoxItem = styled.p`
     color: #000000;
     mix-blend-mode: normal;
     opacity: 0.5;
-    margin:0;
+    margin: 0;
 `;
 const ImageGalleryContainer = styled.div`
     display: grid;
@@ -121,6 +165,12 @@ const ImageGalleryContainer = styled.div`
         "a b"
         "c b";
     gap: 1rem;
+    @media screen and (max-width: 560px) {
+        grid-template-areas:
+            "a"
+            "b"
+            "c";
+    }
 `;
 const Image1 = styled.img`
     grid-area: a;
@@ -144,6 +194,9 @@ const RecommendationContainer = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 2rem;
+    @media screen and (max-width:560px) {
+        flex-direction:column;
+    }
 `;
 const RecommendationImage = styled.img`
     width: 100%;
@@ -153,8 +206,19 @@ const RecommendationCard = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    button{
-        width:40%;
+    justify-content: space-between;
+    button {
+        width: 40%;
+    }
+    @media screen and (max-width: 768px) {
+        button{
+            width:80%;
+        }
+    }
+    @media screen and (max-width: 560px) {
+        button {
+            width: 100%;
+        }
     }
 `;
 const RecommendationCardHeading = styled.h4`
@@ -198,7 +262,9 @@ export default function ProductDetails(props: any) {
                     <RecommendationCardHeading>
                         {data.name}
                     </RecommendationCardHeading>
-                    <OrangeButton onClick={() => handleLinkClick(data.slug)}>SEE PRODUCT</OrangeButton>
+                    <OrangeButton onClick={() => handleLinkClick(data.slug)}>
+                        SEE PRODUCT
+                    </OrangeButton>
                 </RecommendationCard>
             );
         });
@@ -218,21 +284,25 @@ export default function ProductDetails(props: any) {
                     id: data.id,
                 },
             });
-            setIsCartOpen(true)
+            setIsCartOpen(true);
             window.scrollTo(0, 0);
+        }
     }
-    }
-    const handleLinkClick = (productData:string) =>{
-        const productURL = `/products/details/${productData}`
-        window.location.href = productURL
-    }
+    const handleLinkClick = (productData: string) => {
+        const productURL = `/products/details/${productData}`;
+        window.location.href = productURL;
+    };
 
     return (
         <>
             <GoBackButton />
             <ProductDetail>
                 <ProductImageContainer>
-                    <ProductImg src={data.image.desktop} />
+                    <picture>
+                        <ProductImgSource media="(min-width:1440px)" srcSet={data.image.desktop} />
+                        <ProductImgSource media="(min-width:768px)"  srcSet={data.image.tablet} />
+                        <ProductImg src={data.image.mobile} />
+                    </picture>
                 </ProductImageContainer>
                 <ProductDescriptionContainer>
                     {data.new && (
@@ -244,7 +314,7 @@ export default function ProductDetails(props: any) {
                         {data.name}
                     </ProductDescriptionHeading>
                     <ProductDescription>{data.description}</ProductDescription>
-                    <h2>{"$ " + data.price}</h2>
+                    <ProductDescriptionHeading>{"$ " + data.price}</ProductDescriptionHeading>
                     <InputContainer>
                         <ItemQuantityInput setItemAmount={setItemAmount} />
                         <OrangeButton onClick={addToCart}>
@@ -259,7 +329,7 @@ export default function ProductDetails(props: any) {
                     <FeaturesText>{data.features}</FeaturesText>
                 </FeatureContainer>
                 <InTheBoxContainer>
-                    <h1>IN THE BOX</h1>
+                    <ProductDescriptionHeading>IN THE BOX</ProductDescriptionHeading>
                     {mappedListLoaded && mappedList}
                 </InTheBoxContainer>
             </FeaturesContainer>

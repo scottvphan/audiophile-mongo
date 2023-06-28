@@ -14,7 +14,13 @@ const CartContainer = styled.div`
     z-index: 11;
     padding: 1rem;
     border-radius: 0.5rem;
-    min-width:320px;
+    min-width: 320px;
+    @media screen and (max-width: 1440px) {
+        left: 50%;
+    }
+    @media screen and (max-width: 768px) {
+        left: 30%;
+    }
 `;
 const TopContainer = styled.div`
     display: flex;
@@ -62,6 +68,10 @@ const MappedContainer = styled.div`
     gap: 0.5rem;
     align-items: center;
 `;
+const EmptyMessage = styled.h1`
+    font-size: 2rem;
+    text-align: center;
+`;
 interface Cart {
     name: string;
     image: string;
@@ -94,6 +104,7 @@ export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
     }, [cart, setCart]);
     function removeAllItems() {
         setCart({});
+        setIsCartOpen(false);
     }
     function handleCloseModal() {
         setIsCartOpen(false);
@@ -117,7 +128,13 @@ export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
                             <h4>$ {totalPrice}</h4>
                         </TotalContainer>
                         <UnStyledLink to={"/checkout"}>
-                            <OrangeButton onClick={() =>{setIsCartOpen(false)}}>CHECKOUT</OrangeButton>
+                            <OrangeButton
+                                onClick={() => {
+                                    setIsCartOpen(false);
+                                }}
+                            >
+                                CHECKOUT
+                            </OrangeButton>
                         </UnStyledLink>
                     </>
                 ) : (
@@ -125,11 +142,7 @@ export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
                         <TopContainer>
                             <CartHeading>Cart ({cartLength})</CartHeading>
                         </TopContainer>
-                        <MappedContainer>{mappedData}</MappedContainer>
-                        <TotalContainer>
-                            <TotalPrice>TOTAL</TotalPrice>
-                            <h4>$ {totalPrice}</h4>
-                        </TotalContainer>
+                        <EmptyMessage>Cart is empty...</EmptyMessage>
                         <OrangeButton disabled>CHECKOUT</OrangeButton>
                     </>
                 )}

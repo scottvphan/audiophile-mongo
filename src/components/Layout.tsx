@@ -7,13 +7,13 @@ import CartModal from "./CartModal";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Backdrop } from "./StyledComponents";
 import CheckoutModal from "./CheckoutModal";
+import HamburgerMenu from "./HamburgerMenu";
 
 export default function Layout() {
     const { isAuthenticated, user } = useAuth0();
     const [formData, setFormData] = useState<any>("");
-    const [isCheckoutModalOpen, setIsCheckoutModalOpen] =
-        useState<boolean>(false);
-
+    const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+    const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
     const [cart, setCart] = useState<any>(
         isAuthenticated
             ? JSON.parse(localStorage.getItem(`${user?.email}`) ?? "{}")
@@ -42,14 +42,23 @@ export default function Layout() {
         setCart: setCart,
         isCartOpen: isCartOpen,
         setIsCartOpen: setIsCartOpen,
+        isHamburgerOpen: isHamburgerOpen,
+        setIsHamburgerOpen: setIsHamburgerOpen,
     };
 
     return (
         <>
-            {isCartOpen || isCheckoutModalOpen && <Backdrop />}
-            {isCheckoutModalOpen && <CheckoutModal cart={cart} setIsCheckoutModalOpen={setIsCheckoutModalOpen} setCart={setCart} />}
+            {isCartOpen || (isCheckoutModalOpen && <Backdrop />)}
+            {isCheckoutModalOpen && (
+                <CheckoutModal
+                    cart={cart}
+                    setIsCheckoutModalOpen={setIsCheckoutModalOpen}
+                    setCart={setCart}
+                />
+            )}
             <Navbar {...NavbarProps} />
-            {isCartOpen && <CartModal {...NavbarProps} />}
+            {isHamburgerOpen && <HamburgerMenu {...NavbarProps} />}
+            {isCartOpen && (<CartModal {...NavbarProps} />)}
             <Outlet
                 context={{
                     cart,

@@ -1,12 +1,16 @@
 import styled from "styled-components"
-import ZX7image from '/assets/home/desktop/image-speaker-zx7.jpg';
+import ZX7Desktop from '/assets/home/desktop/image-speaker-zx7.jpg';
+import ZX7Tablet from '/assets/home/tablet/image-speaker-zx7.jpg';
+import ZX7Mobile from '/assets/home/mobile/image-speaker-zx7.jpg';
 import { Link } from "react-router-dom";
 
     const ProductPreviewContainer = styled.div`
         display:flex;
         flex-direction: column;
-        padding:1rem 20rem;
-        gap:1rem;
+        gap:2rem;
+        @media screen and (max-width:1440px) {
+            gap:1rem;
+        }
     `
     const ZX9Container = styled.div`
         border-radius:8px;
@@ -15,6 +19,11 @@ import { Link } from "react-router-dom";
         display:flex;
         align-items: center;
         justify-content: space-around;
+        box-sizing: border-box;
+        @media screen and (max-width:1024px) {
+            flex-direction: column;
+            padding:1rem;
+        }
     `
     const ZX9Image = styled.img`
         width:100%;
@@ -29,6 +38,9 @@ import { Link } from "react-router-dom";
         line-height: 58px;
         letter-spacing: 2px;
         color:white;
+        @media screen and (max-width: 560px) {
+            font-size:2rem;
+        }
     `
     const ZX9Description = styled.p`
         font-style: normal;
@@ -41,6 +53,10 @@ import { Link } from "react-router-dom";
     `
     const ZX9DescriptionContainer= styled.section`
         width:40%;
+        @media screen and (max-width:1024px) {
+            text-align: center;
+            width:100%;
+        }
     `
     const ZX9Button = styled.button`
         background-color: #000000;
@@ -50,11 +66,18 @@ import { Link } from "react-router-dom";
     `
     const ZX7Container = styled.div`
         border-radius:8px;
-        background-image: url(${ZX7image});
+        background-image: url(${ZX7Desktop});
         background-repeat: no-repeat;
         background-size: cover;
         width:100%;
         height:34vh;
+        @media screen and (max-width:1024px) {
+            background-image: url(${ZX7Tablet});
+            background-position: right;
+        }
+        @media screen and (max-width:560px) {
+            background-image: url(${ZX7Mobile});
+        }
     `
     const ZX7DescriptionContainer = styled.section`
         width:40%;
@@ -63,6 +86,9 @@ import { Link } from "react-router-dom";
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        @media screen and (max-width: 560px) {
+            width:100%;
+        }
     `
     const ZX7Button = styled.button`
         border: 1px solid #000000;
@@ -80,12 +106,27 @@ import { Link } from "react-router-dom";
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        @media screen and (max-width: 560px) {
+            width:100%;
+            padding:1rem;
+            box-sizing: border-box;
+            text-align:center;
+        }
     `
     const YX1Container = styled.div`
         border-radius:8px;
         display:flex;
         width:100%;
-        gap:1rem;
+        gap:2rem;
+        @media screen and (max-width:1440px) {
+            gap:1rem;
+        }
+        @media screen and (max-width:560px) {
+            flex-direction: column;
+            div{
+                width:100%;
+            }
+        }
     `
     const StyledImgContainer = styled.div`
         width:50%;

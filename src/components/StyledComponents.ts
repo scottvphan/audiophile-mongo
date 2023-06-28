@@ -26,12 +26,22 @@ export const StyledSVG = styled(SVG)`
     &:hover {
         path {
             transition: 0.3s;
-            fill: #d87d4a;
+            fill:#D87D4A;
+
         }
-        transform: scale(1.2);
+        transform: scale(1.2); 
         transition: 0.3s;
     }
     user-select: none;
+    &:disabled{
+        cursor: not-allowed;
+        &:hover{
+            path{
+                fill:white;
+            }
+            transform:scale(1);
+        }
+    }
 `;
 export const OrangeButton = styled.button`
     background: #d87d4a;
@@ -44,6 +54,7 @@ export const OrangeButton = styled.button`
     text-transform: uppercase;
     border:none;
     transition:0.3s;
+    box-sizing: border-box;
     &:hover{
         transition:0.3s;
         background:#FBAF85;

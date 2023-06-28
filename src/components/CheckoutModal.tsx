@@ -8,7 +8,7 @@ import { OrangeButton, UnStyledLink } from "./StyledComponents";
 
 const CheckoutModalContainer = styled.div`
     background-color: white;
-    z-index: 20;
+    z-index: 100;
     padding: 3rem;
     position: fixed;
     top: 45%;
@@ -21,6 +21,11 @@ const CheckoutModalContainer = styled.div`
         button {
             margin: 2rem 0 0rem 0;
         }
+    }
+    @media screen and (max-width: 768px) {
+        width:90%;
+        top:50%;
+        padding: 1rem;
     }
 `;
 const SummaryContainer = styled.div`
@@ -115,12 +120,8 @@ export default function CheckoutModal({
     setCart,
 }: any) {
     const [mappedProducts, setMappedProducts] = useState<any>("");
-    // const [hiddenProducts, setHiddenProducts] = useState<any>("");
     const [isHidden, setIsHidden] = useState<boolean>(true);
     const [totalPrice, setTotalPrice] = useState<any>("");
-    // const [productTotal, setProductTotal] = useState<number>(0)
-    // const [vat, setVat] = useState<number>()
-
     useEffect(() => {
         const cartArray = Object.values(cart);
         const mappedArray = cartArray.map((cart: any) => {
@@ -174,7 +175,7 @@ export default function CheckoutModal({
                                 {isHidden ? mappedProducts[0] : mappedProducts}
                                 {isHidden ? (
                                     <ViewingText onClick={handleHiddenProducts}>
-                                        View More
+                                        and {mappedProducts.length - 1} other item(s)
                                     </ViewingText>
                                 ) : (
                                     <ViewingText onClick={handleHiddenProducts}>

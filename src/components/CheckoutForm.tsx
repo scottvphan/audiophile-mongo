@@ -59,6 +59,9 @@ const BillingDetailsContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    @media screen and (max-width:560px) {
+        grid-template-columns: 1fr;
+    }
 `;
 const LabelContainer = styled.div`
     width: 100%;
@@ -79,22 +82,43 @@ const ShippingInfoContainer = styled.div`
     gap: 1rem;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
+    @media screen and (max-width:560px) {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
 `;
 const InputContainer = styled.div<InputContainerProps>`
     width: 100%;
     grid-column: ${({ stretch }) => (stretch ? "span 2" : "auto")};
+    @media screen and (max-width:560px) {
+        grid-column: auto;
+    }
 `;
-const PaymentDetailsContainer = styled.div``;
-const PaymentMethodLeftContainer = styled.div``;
+const PaymentDetailsContainer = styled.div`
+    @media screen and (max-width:560px) {
+        
+    }
+`;
 const PaymentMethodContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width:560px) {
+        display:grid;
+        grid-template-columns: 1fr;
+    }
+`;
+const PaymentMethodLeftContainer = styled.div`
+    @media screen and (max-width:560px) {
+    }
 `;
 const PaymentMethodRightContainer = styled.div`
-    display: flex;
+    display: grid;
     flex-direction: column;
     width: 50%;
     gap: 1rem;
+    @media screen and (max-width:560px) {
+        width:100%;
+    }
 `;
 const PaymentMethodInput = styled.input`
     width: 20px;
@@ -152,7 +176,7 @@ const CashContainer = styled.div`
 `;
 const CashSVG = styled(SVG)`
     cursor: default;
-    width: 10%;
+    width: 100%;
 `;
 const CashText = styled.p`
     color: #000;

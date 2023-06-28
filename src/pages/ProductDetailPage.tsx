@@ -11,6 +11,12 @@ import ScrollToTop from "../utils/ScrollToTop";
 const ProductDetailContainer = styled.div`
     padding: 0 20rem;
     margin: 2em 0;
+    @media screen and (max-width:1440px) {
+        padding: 0rem 5rem;
+    }
+    @media screen and (max-width:1024px) {
+        padding: 0rem 2rem;
+    }
 `;
 
 export default function ProductDetailPage(props: any) {
@@ -20,7 +26,7 @@ export default function ProductDetailPage(props: any) {
     const [filteredData, setFilteredData] = useState<any>("");
     const [filteredDataLoaded, setFilteredDataLoaded] = useState(false);
     const [mappedData, setMappedData] = useState<any>("");
-    const [mappedDataLoaded, setMappedDataLoaded] = useState(false);
+    // const [mappedDataLoaded, setMappedDataLoaded] = useState(false);
     const location = useLocation();
     useEffect(() => {
         if (props.data) {
@@ -40,13 +46,13 @@ export default function ProductDetailPage(props: any) {
             });
             const sortedData = mappeddata.reverse();
             setMappedData(sortedData);
-            setMappedDataLoaded(true);
+            // setMappedDataLoaded(true);
         }
     }, [filteredData, filteredDataLoaded]);
     return (
         <ProductDetailContainer>
             <ScrollToTop />
-            {mappedDataLoaded && mappedData}
+            {mappedData && mappedData}
             <ProductCardList />
             <AdComponent />
         </ProductDetailContainer>

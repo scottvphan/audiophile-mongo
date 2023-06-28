@@ -3,16 +3,32 @@ import styled from "styled-components";
 const AdContainer = styled.div`
     display: flex;
     margin: 4rem 0;
-    gap:0 1rem;
+    gap: 0 1rem;
+    @media screen and (max-width: 1024px) {
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 const TextContainer = styled.div`
-    padding: 2rem;
+    /* padding: 2rem; */
     box-sizing: border-box;
-    width:50%;
-    display:flex;
+    width: 50%;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+        text-align: center;
+        padding:2rem 10rem;
+    }
+    @media screen and (max-width: 768px) {
+        padding:2rem;        
+    }
+    @media screen and (max-width: 560px) {
+        padding:1rem;
+    }
 `;
 const Heading = styled.h1`
     color: #000;
@@ -32,11 +48,14 @@ const Description = styled.p`
     line-height: 25px;
 `;
 const ImageContainer = styled.div`
-    width:50%;
-`
+    width: 50%;
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+    }
+`;
 const StyledImg = styled.img`
-    width:100%;
-`
+    width: 100%;
+`;
 export default function AdComponent() {
     return (
         <AdContainer>
