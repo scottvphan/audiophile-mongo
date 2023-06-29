@@ -41,13 +41,13 @@ export default function Layout() {
     };
 
     useEffect(() => {
-        if (!isAuthenticated) {
+            console.log(user);
+            if (!isAuthenticated) {
             if (JSON.stringify(cart) !== sessionStorage.getItem("cart")) {
                 sessionStorage.setItem("cart", JSON.stringify(cart));
             }
         } else {
             sessionStorage.clear();
-            console.log("authenticated");
             if (
                 JSON.stringify(cart) !== localStorage.getItem(`${user?.email}`)
             ) {
