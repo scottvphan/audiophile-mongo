@@ -66,17 +66,25 @@ export default function ItemQuantityInput({
     }
 
     useEffect(() => {
-        if (setCart) {
+        if(setCart){
             if (prevQuantityRef.current !== currentQuantity) {
-                setCart((prevCart: any) => ({
-                    ...prevCart,
-                    [id]: {
-                        ...prevCart[id],
-                        quantity: currentQuantity,
-                        total: currentQuantity * price,
-                    },
-                }));
-                prevQuantityRef.current = currentQuantity;
+                if (currentQuantity > 0) {
+                    setCart((prevCart: any) => ({
+                        ...prevCart,
+                        [id]: {
+                            ...prevCart[id],
+                            quantity: currentQuantity,
+                            total: currentQuantity * price,
+                        },
+                    }));
+                    prevQuantityRef.current = currentQuantity;
+                } else {
+                    setCart((prevState: any) => {
+                        const updatedCart = { ...prevState };
+                        delete updatedCart[id];
+                        return updatedCart;
+                    });
+                }
             }
         }
         if (setItemAmount) {
