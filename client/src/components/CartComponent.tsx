@@ -43,9 +43,8 @@ const ProductInfoPrice = styled.p`
     padding:0;
     margin:0;
 `
-export default function CartComponent({ setCart, data}:any){
-    console.log(data)
-    return(
+export default function CartComponent({ setCart, data }:any){
+    return (
         <CartComponentContainer>
             <CartComponentLeft>
                 <StyledImg src={data.image} />
