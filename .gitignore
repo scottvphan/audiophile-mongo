@@ -29,3 +29,4 @@ dist-ssr
 *.sketch
 *.fig
 __tests__
+.env
