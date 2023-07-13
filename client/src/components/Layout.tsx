@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Outlet, useOutletContext } from "react-router-dom";
@@ -16,9 +17,7 @@ export default function Layout() {
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
     const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
     const [cart, setCart] = useState<any>(
-        isAuthenticated
-            ? JSON.parse(localStorage.getItem(`${user?.email}`) ?? "{}")
-            : JSON.parse(sessionStorage.getItem("cart") ?? "{}")
+        JSON.parse(sessionStorage.getItem("cart") ?? "{}")
     );
     const [isCartOpen, setIsCartOpen] = useState<any>(false);
     const NavbarProps = {
@@ -40,28 +39,55 @@ export default function Layout() {
         await axios.post("http://localhost:4000/form", dataPosted);
     };
 
+    const addUser = async () => {
+        const userData = {
+            name: user?.name,
+            email: user?.email,
+        };
+        await axios.post("http://localhost:4000/user", userData);
+    };
+
+    const updateCart = async () => {
+        const userCart = [cart, user?.email];
+        await axios.post("http://localhost:4000/cart", userCart);
+    };
+
+    const getCart = async () => {
+        axios
+            .get(`http://localhost:4000/cart/${user?.email}`)
+            .then(function (response) {
+                console.log(response.data);
+                setCart(response.data)
+            })
+            .catch(function (error) {
+                if (error) {
+                    console.log(error);
+                }
+            });
+    };
+
     useEffect(() => {
-            console.log(user);
-            if (!isAuthenticated) {
+        if (!isAuthenticated) {
             if (JSON.stringify(cart) !== sessionStorage.getItem("cart")) {
                 sessionStorage.setItem("cart", JSON.stringify(cart));
             }
         } else {
             sessionStorage.clear();
-            if (
-                JSON.stringify(cart) !== localStorage.getItem(`${user?.email}`)
-            ) {
-                localStorage.setItem(`${user?.email}`, JSON.stringify(cart));
-            }
+            updateCart();
         }
     }, [cart, isAuthenticated, user]);
 
     useEffect(() => {
+        if (isAuthenticated) {
+            addUser();
+            getCart();
+        }
+    }, [isAuthenticated]);
+
+    useEffect(() => {
         if (formData) {
-            console.log(formData);
             postData();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData]);
 
     return (
