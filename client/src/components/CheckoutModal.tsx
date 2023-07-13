@@ -11,21 +11,29 @@ const CheckoutModalContainer = styled.div`
     z-index: 100;
     padding: 3rem;
     position: fixed;
-    top: 45%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 0.5rem;
     max-width: 548px;
     box-sizing: border-box;
+    transition: 0.5s;
     a {
         button {
             margin: 2rem 0 0rem 0;
         }
     }
-    @media screen and (max-width: 768px) {
-        width:90%;
-        top:50%;
+    @media screen and (max-width: 1024px) {
+        width: 80%;
+        top: 50%;
         padding: 1rem;
+        transition: 0.5s;
+    }
+    @media screen and (max-width: 768px) {
+        width: 90%;
+        top: 50%;
+        padding: 1rem;
+        transition: 0.5s;
     }
 `;
 const SummaryContainer = styled.div`
@@ -145,11 +153,8 @@ export default function CheckoutModal({
             },
             0
         );
-        // setProductTotal(total)
         const vat2 = parseFloat((total * 0.2).toFixed(2));
         setTotalPrice(total + vat2 + 50);
-        // setVat(vat2)
-        // setHiddenProducts(mappedArray)
     }, [cart]);
     function handleButton() {
         setIsCheckoutModalOpen(false);
@@ -175,7 +180,8 @@ export default function CheckoutModal({
                                 {isHidden ? mappedProducts[0] : mappedProducts}
                                 {isHidden ? (
                                     <ViewingText onClick={handleHiddenProducts}>
-                                        and {mappedProducts.length - 1} other item(s)
+                                        and {mappedProducts.length - 1} other
+                                        item(s)
                                     </ViewingText>
                                 ) : (
                                     <ViewingText onClick={handleHiddenProducts}>
