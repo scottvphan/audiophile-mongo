@@ -127,13 +127,13 @@ export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
                             <TotalPrice>TOTAL</TotalPrice>
                             <h4>$ {totalPrice}</h4>
                         </TotalContainer>
-                        <UnStyledLink to={"/checkout"}>
+                        <UnStyledLink to={"/cart"}>
                             <OrangeButton
                                 onClick={() => {
                                     setIsCartOpen(false);
                                 }}
                             >
-                                CHECKOUT
+                                VIEW YOUR CART
                             </OrangeButton>
                         </UnStyledLink>
                     </>

@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 
 const CheckoutPageContainer = styled.div`
+    min-height:65vh;
     padding: 1rem 20rem;
     background-color: #cfcfcf;
     @media screen and (max-width:1440px) {
@@ -69,7 +70,6 @@ export default function CheckoutPage() {
         <CheckoutPageContainer>
             <GoBackButton />
             <CheckoutContainer>
-                {/* <button onClick={() =>{console.log(location)}}>TEST</button> */}
                 <CheckoutFormContainer>
                     <CheckoutForm formData={formData} setFormData={setFormData} setIsCheckoutModalOpen={setIsCheckoutModalOpen}  />
                 </CheckoutFormContainer>

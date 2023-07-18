@@ -53,11 +53,19 @@ export default function Layout() {
     };
 
     const getCart = async () => {
-        axios
-            .get(`http://localhost:4000/cart/${user?.email}`)
+        axios.get(`http://localhost:4000/cart/${user?.email}`)
             .then(function (response) {
-                console.log(response.data);
-                setCart(response.data)
+                const data = response.data
+                const fixedData = data.map((obj:any) => {
+                    const productId = obj.id
+                    const { ...rest } = obj;
+                    return { [productId]: rest };
+                });
+                const finalObj = {}
+                for(let i = 0; i < fixedData.length; i++ ) {
+                    Object.assign(finalObj, fixedData[i]);
+                }
+                setCart(finalObj);
             })
             .catch(function (error) {
                 if (error) {
@@ -65,6 +73,13 @@ export default function Layout() {
                 }
             });
     };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            addUser();
+            getCart();
+        }
+    }, [isAuthenticated]);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -75,14 +90,12 @@ export default function Layout() {
             sessionStorage.clear();
             updateCart();
         }
+        console.log(cart)
     }, [cart, isAuthenticated, user]);
 
     useEffect(() => {
-        if (isAuthenticated) {
-            addUser();
-            getCart();
-        }
-    }, [isAuthenticated]);
+        updateCart()
+    }, [setIsCartOpen])
 
     useEffect(() => {
         if (formData) {

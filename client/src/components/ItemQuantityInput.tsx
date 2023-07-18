@@ -64,9 +64,9 @@ export default function ItemQuantityInput({
     function handleAdd() {
         setCurrentQuantity((prevQuantity) => prevQuantity + 1);
     }
-
     useEffect(() => {
-        if(setCart){
+        if (setCart) {
+            // console.log(data);
             if (prevQuantityRef.current !== currentQuantity) {
                 if (currentQuantity > 0) {
                     setCart((prevCart: any) => ({
