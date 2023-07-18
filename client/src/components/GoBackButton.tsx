@@ -13,6 +13,7 @@ const GoBack = styled.button`
     background: none;
     border:none;
     margin-bottom: 1rem;
+    cursor:pointer;
     &:hover{
         transition:0.15s;
         color:#D87D4A;
