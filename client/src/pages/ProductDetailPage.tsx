@@ -9,6 +9,7 @@ import AdComponent from "../components/AdComponent";
 import ScrollToTop from "../utils/ScrollToTop";
 
 const ProductDetailContainer = styled.div`
+    min-height:65vh;
     padding: 0 20rem;
     margin: 2em 0;
     @media screen and (max-width:1440px) {

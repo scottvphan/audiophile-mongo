@@ -11,6 +11,7 @@ import AdComponent from "../components/AdComponent";
 import { OrangeButton, UnStyledLink } from "../components/StyledComponents";
 
 const ProductInfoContainer = styled.div`
+    min-height:65vh;
     height: 100%;
     background-color: white;
     padding: 0 20rem;

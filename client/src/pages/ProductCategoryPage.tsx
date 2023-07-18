@@ -9,6 +9,7 @@ import ScrollToTop from "../utils/ScrollToTop";
 import AdComponent from "../components/AdComponent";
 
 const ProductCategoryContainer = styled.div`
+    min-height:65vh;
     padding:0 20rem;
     margin: 4rem 0;
     @media screen and (max-width:1440px) {
@@ -32,15 +33,15 @@ const ProductCardContainer = styled.div`
     display:grid;
     gap:2rem;
 `
-export default function ProductCategoryPage(props: any) {
+export default function ProductCategoryPage({ data }: any) {
     const [filteredData, setFilteredData] = useState<any>("");
     const [filteredDataLoaded, setFilteredDataLoaded] = useState(false);
     const [mappedData, setMappedData] = useState<any>("");
     const [mappedDataLoaded, setMappedDataLoaded] = useState(false);
     const location = useLocation();
     useEffect(() => {
-        if (props.data) {
-            const filtereddata = props.data.filter((data: any) => {
+        if (data) {
+            const filtereddata = data.filter((data: any) => {
                 if (data.category === window.location.pathname.replace('/products/', '')) {
                     return data;
                 }
@@ -48,7 +49,7 @@ export default function ProductCategoryPage(props: any) {
             setFilteredData(filtereddata);
             setFilteredDataLoaded(true);
         }
-    }, [props.data, location]);
+    }, [data, location]);
     useEffect(() => {
         if (filteredDataLoaded) {
             const mappeddata = filteredData.map((data: any) => {

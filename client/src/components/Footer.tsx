@@ -7,6 +7,7 @@ import logo from "/assets/shared/desktop/logo.svg";
 const Footer = styled.footer`
     background-color: black;
     color: white;
+    min-height:25vh;
 `;
 const LinkContainer = styled.div`
     display: flex;

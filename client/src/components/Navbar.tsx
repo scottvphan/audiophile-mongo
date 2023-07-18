@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import SVG from "react-inlinesvg";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "/assets/shared/desktop/logo.svg";
 import hamburger from "/assets/hamburger.svg";
-import { StyledSVG } from "./StyledComponents";
+import { StyledSVG, UnStyledLink } from "./StyledComponents";
+
 const Nav = styled.nav`
     background-color: #101010;
     color: white;
@@ -17,6 +18,7 @@ const Nav = styled.nav`
     @media screen and (max-width: 1024px) {
         padding: 0rem 2rem;
     }
+    min-height:10vh;
 `;
 const LinkContainer = styled.div`
     display: flex;
@@ -56,10 +58,18 @@ const SVGContainer = styled.div`
     display: flex;
     gap: 1rem;
     align-items: center;
+    height:100%;
 `;
 const StyledLogo = styled(SVG)`
     width: 100%;
     height: 50%;
+    transition:0.3s;
+    &:hover{
+        path{
+            transition:0.3s;
+            fill:#D87D4A;
+        }
+    }
 `;
 export default function Navbar({
     cart,
@@ -67,6 +77,11 @@ export default function Navbar({
     isCartOpen,
     setIsHamburgerOpen,
 }: any) {
+    const location = useLocation();
+    
+    const isCart = location.pathname.includes('cart')
+    const isCheckout = location.pathname.includes('checkout')
+    
     function handleCart() {
         if (Object.keys(cart).length !== 0) {
             setIsCartOpen(!isCartOpen);
@@ -84,7 +99,9 @@ export default function Navbar({
                         }}
                         src={hamburger}
                     />
-                    <StyledLogo src={logo} />
+                    <UnStyledLink to={"/"}>
+                        <StyledLogo src={logo} />
+                    </UnStyledLink>
                 </SVGContainer>
                 <LinkContainer>
                     <StyledLink to="/">HOME</StyledLink>
@@ -94,21 +111,10 @@ export default function Navbar({
                     <StyledLink to="/products/speakers">SPEAKERS</StyledLink>
                     <StyledLink to="/products/earphones">EARPHONES</StyledLink>
                 </LinkContainer>
-                {Object.keys(cart).length === 0 ? 
-                (
-                    <StyledSVG
-                        aria-disabled
-                        onClick={handleCart}
-                        src="/assets/shared/desktop/icon-cart.svg"
-                    />
-                ):
-                (
-                    <StyledSVG
-                        onClick={handleCart}
-                        src="/assets/shared/desktop/icon-cart.svg"
-                    />
-                )
-                }
+                <StyledSVG
+                    onClick={handleCart}
+                    src="/assets/shared/desktop/icon-cart.svg"
+                />
             </NavContainer>
         </Nav>
     );
