@@ -6,12 +6,12 @@ import { v4 as uuidv4 } from "uuid";
 import { useLayoutOutletContext } from "./Layout";
 import ItemQuantityInput from "./ItemQuantityInput";
 import GoBackButton from "./GoBackButton";
-import { OrangeButton } from "./StyledComponents";
+import { OrangeButton, UnStyledLink } from "./StyledComponents";
 
 const ProductDetail = styled.div`
     display: flex;
     grid-template-columns: 1fr 1fr;
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 768px) {
         flex-direction: column;
     }
     box-sizing: border-box;
@@ -19,31 +19,25 @@ const ProductDetail = styled.div`
 `;
 const ProductImageContainer = styled.div`
     width: 100%;
-    /* height:100%; */
     box-sizing: border-box;
 `;
 const ProductImg = styled.img`
     width: 100%;
-    /* height:100%; */
     box-sizing: border-box;
 `;
 const ProductImgSource = styled.source`
     width: 100%;
-    height:100%;
+    height: 100%;
 `;
 const ProductDescriptionContainer = styled.div`
-    /* width: 100%; */
     padding: 3rem;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
-    /* @media screen and (max-width: 560px) {
-        padding: 0;
-    } */
-    box-sizing:border-box;
-    @media screen and (max-width:560px) {
-        padding:1rem;
+    box-sizing: border-box;
+    @media screen and (max-width: 560px) {
+        padding: 1rem;
     }
 `;
 const ProductDescriptionNewTag = styled.h6`
@@ -63,8 +57,8 @@ const ProductDescriptionHeading = styled.h1`
     letter-spacing: 1.42857px;
     text-transform: uppercase;
     color: #000000;
-    @media screen and (max-width:560px) {
-        font-size:1.5rem;
+    @media screen and (max-width: 560px) {
+        font-size: 1.5rem;
     }
 `;
 const ProductDescription = styled.p`
@@ -86,13 +80,13 @@ const InputContainer = styled.div`
     button {
         width: 55%;
     }
-    @media screen and (max-width:768px) {
-        width:100%;
-        button{
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        button {
             width: 100%;
         }
-        div{
-            width:100%;
+        div {
+            width: 100%;
         }
     }
 `;
@@ -101,11 +95,11 @@ const FeaturesContainer = styled.div`
     display: flex;
     @media screen and (max-width: 768px) {
         flex-direction: column;
-        gap:1rem;
+        gap: 1rem;
     }
 `;
 const FeatureContainer = styled.div`
-    width:70%;
+    width: 70%;
     @media screen and (max-width: 560px) {
         width: 100%;
     }
@@ -132,9 +126,9 @@ const InTheBoxContainer = styled.div`
     display: grid;
     width: 30%;
     box-sizing: border-box;
-    margin:1em 0;
-    @media screen and (max-width:768px) {
-        width:100%;
+    margin: 1em 0;
+    @media screen and (max-width: 768px) {
+        width: 100%;
     }
 `;
 const InTheBoxListContainer = styled.div`
@@ -194,8 +188,8 @@ const RecommendationContainer = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    @media screen and (max-width:560px) {
-        flex-direction:column;
+    @media screen and (max-width: 560px) {
+        flex-direction: column;
     }
 `;
 const RecommendationImage = styled.img`
@@ -210,9 +204,12 @@ const RecommendationCard = styled.div`
     button {
         width: 40%;
     }
+    a {
+        text-align: center;
+    }
     @media screen and (max-width: 768px) {
-        button{
-            width:80%;
+        button {
+            width: 80%;
         }
     }
     @media screen and (max-width: 560px) {
@@ -262,9 +259,9 @@ export default function ProductDetails(props: any) {
                     <RecommendationCardHeading>
                         {data.name}
                     </RecommendationCardHeading>
-                    <OrangeButton onClick={() => handleLinkClick(data.slug)}>
-                        SEE PRODUCT
-                    </OrangeButton>
+                    <UnStyledLink to={`/products/details/${data.slug}`}>
+                        <OrangeButton>SEE PRODUCT</OrangeButton>
+                    </UnStyledLink>
                 </RecommendationCard>
             );
         });
@@ -288,10 +285,6 @@ export default function ProductDetails(props: any) {
             window.scrollTo(0, 0);
         }
     }
-    const handleLinkClick = (productData: string) => {
-        const productURL = `/products/details/${productData}`;
-        window.location.href = productURL;
-    };
 
     return (
         <>
@@ -299,8 +292,14 @@ export default function ProductDetails(props: any) {
             <ProductDetail>
                 <ProductImageContainer>
                     <picture>
-                        <ProductImgSource media="(min-width:1440px)" srcSet={data.image.desktop} />
-                        <ProductImgSource media="(min-width:768px)"  srcSet={data.image.tablet} />
+                        <ProductImgSource
+                            media="(min-width:1440px)"
+                            srcSet={data.image.desktop}
+                        />
+                        <ProductImgSource
+                            media="(min-width:768px)"
+                            srcSet={data.image.tablet}
+                        />
                         <ProductImg src={data.image.mobile} />
                     </picture>
                 </ProductImageContainer>
@@ -314,7 +313,9 @@ export default function ProductDetails(props: any) {
                         {data.name}
                     </ProductDescriptionHeading>
                     <ProductDescription>{data.description}</ProductDescription>
-                    <ProductDescriptionHeading>{"$ " + data.price}</ProductDescriptionHeading>
+                    <ProductDescriptionHeading>
+                        {"$ " + data.price}
+                    </ProductDescriptionHeading>
                     <InputContainer>
                         <ItemQuantityInput setItemAmount={setItemAmount} />
                         <OrangeButton onClick={addToCart}>
@@ -329,7 +330,9 @@ export default function ProductDetails(props: any) {
                     <FeaturesText>{data.features}</FeaturesText>
                 </FeatureContainer>
                 <InTheBoxContainer>
-                    <ProductDescriptionHeading>IN THE BOX</ProductDescriptionHeading>
+                    <ProductDescriptionHeading>
+                        IN THE BOX
+                    </ProductDescriptionHeading>
                     {mappedListLoaded && mappedList}
                 </InTheBoxContainer>
             </FeaturesContainer>
