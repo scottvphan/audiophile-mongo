@@ -11,7 +11,9 @@ import { Route } from "react-router-dom";
 import ProductCategoryPage from "./pages/ProductCategoryPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import { useAuth0 } from "@auth0/auth0-react";
+import CartPage from "./pages/CartPage";
+import Loader from "./components/Loader";
+import ErrorPage from "./pages/ErrorPage";
 
 const GlobalStyle = createGlobalStyle`
     html,
@@ -34,8 +36,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-export default function Index({ data }: any) {
-    const { isLoading } = useAuth0();
+export default function Index({ data, dataLoaded }: any) {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/" element={<Layout />}>
@@ -53,14 +54,16 @@ export default function Index({ data }: any) {
                     path="/products/details/:id"
                     element={<ProductDetailPage data={data} />}
                 />
+                <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="*" element={<ErrorPage />} />
             </Route>
         )
     );
     return (
         <>
             <GlobalStyle />
-            {isLoading ? <></> : <RouterProvider router={router} />}
+            {dataLoaded ? <RouterProvider router={router} /> : <Loader />}
         </>
     );
 }

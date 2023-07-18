@@ -2,15 +2,17 @@ import { useState, useEffect } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
 import Index from "./Index";
 import axios from "axios";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
     const [data, setData] = useState<unknown>("");
+    const [dataLoaded, setDataLoaded] = useState<boolean>(false)
     const [failed, setFailed] = useState<boolean>(false)
     useEffect(() => {
         axios.get("http://localhost:4000/data")
             .then(function (response){
-                setData(response.data)
-                console.log(response.data)
+                setData(Object.values(response.data))
+                setDataLoaded(true)
             })
             .catch(function (error){
                 if(error){
@@ -30,7 +32,15 @@ function App() {
                 }}
             >
                 <>
-                    <Index failed={failed} data={data} />
+                    {!failed ?
+                    (
+                        <Index data={data} dataLoaded={dataLoaded} />
+                    )
+                    :
+                    (
+                        <ErrorPage />
+                    )
+                    }
                 </>
             </Auth0Provider>
         </>
