@@ -4,20 +4,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const User = require("../models/User");
 const Product = require("../models/Product");
-// const { MongoClient } = require("mongob")
 
-// async function run() {
-//     try{
-//         await client.connect()
-//         const db = client.db("users")
-//         const coll = db.collection()
-//     } finally{
-//         await client.close()
-//     }
-// }
 const app = express();
 app.use(express.json());
-// const db = mongoose.createConnection();
 
 router.post("/form", (req, res) => {
     const userData = ({ name, email, phoneNumber, address } = req.body);
@@ -27,17 +16,6 @@ router.post("/form", (req, res) => {
         phoneNumber: userData.phoneNumber,
         address: userData.address,
     });
-    // console.log(userData);
-    // console.log(user);
-    // user.save()
-    //     .then((results) =>{
-    //         console.log(results)
-    //         res.send(results)
-    //         console.log('sending data')
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     })
 });
 
 router.post("/user", (req, res) => {
@@ -45,7 +23,6 @@ router.post("/user", (req, res) => {
 
     User.findOne({ email }).then((existingUser) => {
         if (existingUser) {
-            console.log("User already exists");
             res.send({ message: "User already exists" });
         } else {
             const user = new User({
@@ -64,17 +41,27 @@ router.post("/user", (req, res) => {
     });
 });
 
+router.get("/data", (req, res) => {
+    Product.findOne()
+        .then((product) => {
+            if(!product){
+                res.status(404).json( {message: "Products not found"} )
+            } else {
+                const productData = product
+                res.json(productData)
+            }
+        })
+});
+
 router.post("/cart", (req, res) => {
     const cartData = req.body[0];
     const userEmail = req.body[1];
-    console.log(cartData);
     User.findOneAndUpdate(
         { email: userEmail },
         { $set: { cart: Object.values(cartData) } },
         { new: true }
     )
         .then((updatedUser) => {
-            console.log("User cart updated:", updatedUser.cart);
             res.sendStatus(200);
         })
         .catch((err) => {
@@ -83,23 +70,8 @@ router.post("/cart", (req, res) => {
         });
 });
 
-router.get("/data", (req, res) => {
-    Product.findOne()
-        .then((product) => {
-            if(!product){
-                res.status(404).json( {message: "Products not found"} )
-            } else {
-                const productData = product
-                console.log(product)
-                res.json([productData])
-            }
-        })
-});
-
-
 router.get("/cart/:email", (req, res) => {
     const userEmail = req.params.email;
-    console.log(userEmail)
     User.findOne({ email: userEmail })
         .then((user) => {
             if (!user) {

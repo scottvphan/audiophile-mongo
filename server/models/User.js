@@ -8,10 +8,6 @@ const UserSchema = new mongoose.Schema(
         email: {
             type: String,
         },
-        entryDate: {
-            type: Date,
-            default: Date.now,
-        },
         cart: [
             {
                 name: String,
