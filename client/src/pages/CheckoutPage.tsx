@@ -4,8 +4,6 @@ import CheckoutForm from "../components/CheckoutForm";
 import CheckoutSummary from "../components/CheckoutSummary";
 import { useLayoutOutletContext } from "../components/Layout";
 import GoBackButton from "../components/GoBackButton";
-import { useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
 
 const CheckoutPageContainer = styled.div`
     min-height:65vh;
@@ -59,13 +57,8 @@ const CheckoutSummaryContainer = styled.div`
 `;
 
 export default function CheckoutPage() {
-    const { cart, formData, setFormData, setIsCheckoutModalOpen } = useLayoutOutletContext()
-    const navigate = useNavigate();
-    useEffect(() =>{
-        if(Object.keys(cart).length === 0){
-            navigate('/')
-        }
-    }, [cart, navigate])
+    const { formData, setFormData, setIsCheckoutModalOpen } = useLayoutOutletContext()
+
     return (
         <CheckoutPageContainer>
             <GoBackButton />
