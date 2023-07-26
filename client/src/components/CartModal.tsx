@@ -109,7 +109,9 @@ export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
     function handleCloseModal() {
         setIsCartOpen(false);
     }
+    
     const cartLength = Object.values(cart).length;
+
     return (
         <>
             <Backdrop onClick={handleCloseModal} />
