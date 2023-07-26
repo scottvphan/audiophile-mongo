@@ -7,17 +7,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import SVG from "react-inlinesvg/esm";
 import { z } from "zod";
+import { useLayoutOutletContext } from "./Layout";
 
 interface FormInputs {
     name: string;
     email: string;
     phoneNumber: string;
     address: {
-        street:string;
+        street: string;
         zipcode: string;
         city: string;
         country: string;
-    }
+        state: string;
+    };
     eMoney: boolean;
     cash: boolean;
     credit: boolean;
@@ -61,7 +63,7 @@ const BillingDetailsContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    @media screen and (max-width:560px) {
+    @media screen and (max-width: 560px) {
         grid-template-columns: 1fr;
     }
 `;
@@ -84,7 +86,7 @@ const ShippingInfoContainer = styled.div`
     gap: 1rem;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
-    @media screen and (max-width:560px) {
+    @media screen and (max-width: 560px) {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
     }
@@ -92,25 +94,24 @@ const ShippingInfoContainer = styled.div`
 const InputContainer = styled.div<InputContainerProps>`
     width: 100%;
     grid-column: ${({ stretch }) => (stretch ? "span 2" : "auto")};
-    @media screen and (max-width:560px) {
+    @media screen and (max-width: 560px) {
         grid-column: auto;
     }
 `;
 const PaymentDetailsContainer = styled.div`
-    @media screen and (max-width:560px) {
-        
+    @media screen and (max-width: 560px) {
     }
 `;
 const PaymentMethodContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    @media screen and (max-width:560px) {
-        display:grid;
+    @media screen and (max-width: 560px) {
+        display: grid;
         grid-template-columns: 1fr;
     }
 `;
 const PaymentMethodLeftContainer = styled.div`
-    @media screen and (max-width:560px) {
+    @media screen and (max-width: 560px) {
     }
 `;
 const PaymentMethodRightContainer = styled.div`
@@ -118,8 +119,8 @@ const PaymentMethodRightContainer = styled.div`
     flex-direction: column;
     width: 50%;
     gap: 1rem;
-    @media screen and (max-width:560px) {
-        width:100%;
+    @media screen and (max-width: 560px) {
+        width: 100%;
     }
 `;
 const PaymentMethodInput = styled.input`
@@ -195,8 +196,10 @@ export default function CheckoutForm({
     setFormData,
     setIsCheckoutModalOpen,
 }: any) {
-    const [isCreditSelected, setIsCreditSelected] = useState<boolean>(false);
+    const [isCreditSelected, setIsCreditSelected] = useState<boolean>(true);
     const [isCashSelected, setIsCashSelected] = useState<boolean>(false);
+
+    const { cart } = useLayoutOutletContext();
 
     const schema = z.object({
         name: z.string().min(2, "Name must be at least 2 characters"),
@@ -209,12 +212,13 @@ export default function CheckoutForm({
             zipcode: z.string().min(4, "Zipcode must be at least 4 characters"),
             city: z.string().min(2, "City must be at least 2 characters"),
             country: z.string().min(2, "Country must be at least 2 characters"),
+            state: z.string().min(2, "State must be 2 characters"),
         }),
         ...(isCashSelected && {
-            // cash: z.boolean(),
+            cash: z.string(),
         }),
         ...(isCreditSelected && {
-            // credit: z.boolean(),
+            credit: z.string(),
             eMoneyNumber: z.string().length(16, "Invalid Credit Card Number"),
             eMoneyPin: z.string().min(3, "Invalid Pin"),
         }),
@@ -238,9 +242,18 @@ export default function CheckoutForm({
         setIsCreditSelected(false);
         setIsCashSelected(true);
     };
+
     const onSubmit = (data: FormInputs): void => {
-        console.log(data)
-        setFormData(data);
+        const formData = {
+            name: data.name,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            address: data.address,
+            credit: data?.credit ? true : false,
+            cash: data?.cash ? true : false,
+            cart: Object.values(cart),
+        };
+        setFormData(formData);
         setIsCheckoutModalOpen((prevCheckout: any) => !prevCheckout);
         reset();
     };
@@ -343,9 +356,7 @@ export default function CheckoutForm({
                     </InputContainer>
                     <InputContainer>
                         <LabelContainer>
-                            <StyledLabel htmlFor="city">
-                                City Number
-                            </StyledLabel>
+                            <StyledLabel htmlFor="city">City</StyledLabel>
                             {errors.address?.city && (
                                 <ErrorMessage htmlFor="city">
                                     {errors.address?.city.message}
@@ -355,6 +366,22 @@ export default function CheckoutForm({
                         <StyledInput
                             {...register("address.city", { required: true })}
                             id="city"
+                            type="text"
+                            placeholder="New York"
+                        />
+                    </InputContainer>
+                    <InputContainer>
+                        <LabelContainer>
+                            <StyledLabel htmlFor="state">State</StyledLabel>
+                            {errors.address?.state && (
+                                <ErrorMessage htmlFor="state">
+                                    {errors.address?.state.message}
+                                </ErrorMessage>
+                            )}
+                        </LabelContainer>
+                        <StyledInput
+                            {...register("address.state", { required: true })}
+                            id="state"
                             type="text"
                             placeholder="New York"
                         />
@@ -372,7 +399,7 @@ export default function CheckoutForm({
                             {...register("address.country", { required: true })}
                             id="country"
                             type="text"
-                            placeholder="New York"
+                            placeholder="United States"
                         />
                     </InputContainer>
                 </ShippingInfoContainer>
@@ -392,7 +419,8 @@ export default function CheckoutForm({
                                     name="credit"
                                     type="radio"
                                     id="e-money"
-                                    onChange={handleCreditSelection}
+                                    value={"credit"}
+                                    onClick={handleCreditSelection}
                                     checked={isCreditSelected}
                                 />
                                 <PaymentMethodLabel htmlFor="e-money">
@@ -408,7 +436,8 @@ export default function CheckoutForm({
                                     name="cash"
                                     type="radio"
                                     id="cash"
-                                    onChange={handleCashSelection}
+                                    value={"cash"}
+                                    onClick={handleCashSelection}
                                     checked={isCashSelected}
                                 />
                                 <PaymentMethodLabel htmlFor="cash">
