@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import CartItemComponent from "./CartItemComponent";
 import { v4 as uuidv4 } from "uuid";
 import { OrangeButton, UnStyledLink } from "./StyledComponents";
+import LoaderComponent from "./LoaderComponent";
 
 const SummaryHeading = styled.h4`
     font-weight: 700;
@@ -57,7 +58,7 @@ interface Cart {
 }
 
 export default function CheckoutSummary({ isPreview }: any) {
-    const { cart } = useLayoutOutletContext();
+    const { cart, isCartLoaded } = useLayoutOutletContext();
     const [productTotal, setProductTotal] = useState<number>(0);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [mappedProducts, setMappedProducts] = useState<any>(0);
@@ -90,34 +91,41 @@ export default function CheckoutSummary({ isPreview }: any) {
         setTotalPrice(total + vat2 + 50);
         setVat(vat2);
     }, [cart]);
-
+    
     return (
         <>
-            <SummaryHeading>Summary</SummaryHeading>
-            {!isPreview && <CartContainer>{mappedProducts}</CartContainer>}
-            <CheckoutInformationContainer isPreview={isPreview}>
-                <CheckoutInformationHeading>SHIPPING</CheckoutInformationHeading>
-                <CheckoutInformationText>$ 50</CheckoutInformationText>
-                <CheckoutInformationHeading>VAT (20%)</CheckoutInformationHeading>
-                <CheckoutInformationText>$ {vat ? vat : "Missing VAT"}</CheckoutInformationText>
-                <CheckoutInformationHeading>PRODUCT TOTAL</CheckoutInformationHeading>
-                <CheckoutInformationText>$ {productTotal}</CheckoutInformationText>
-                <CheckoutInformationHeading>TOTAL AMOUNT</CheckoutInformationHeading>
-                <CheckoutInformationText>$ {totalPrice}</CheckoutInformationText>
-            </CheckoutInformationContainer>
-            {isPreview ? (
-                <UnStyledLink to={"/checkout"}>
-                    <OrangeButton>
-                        CONTINUE TO CART
+            {isCartLoaded ? (
+            <>
+                <SummaryHeading>Summary</SummaryHeading>
+                {!isPreview && <CartContainer>{mappedProducts}</CartContainer>}
+                <CheckoutInformationContainer isPreview={isPreview}>
+                    <CheckoutInformationHeading>SHIPPING</CheckoutInformationHeading>
+                    <CheckoutInformationText>$ 50</CheckoutInformationText>
+                    <CheckoutInformationHeading>VAT (20%)</CheckoutInformationHeading>
+                    <CheckoutInformationText>$ {vat ? vat : "Missing VAT"}</CheckoutInformationText>
+                    <CheckoutInformationHeading>PRODUCT TOTAL</CheckoutInformationHeading>
+                    <CheckoutInformationText>$ {productTotal}</CheckoutInformationText>
+                    <CheckoutInformationHeading>TOTAL AMOUNT</CheckoutInformationHeading>
+                    <CheckoutInformationText>$ {totalPrice}</CheckoutInformationText>
+                </CheckoutInformationContainer>
+                {isPreview ? (
+                    <UnStyledLink to={"/checkout"}>
+                        <OrangeButton>
+                            CONTINUE TO CART
+                        </OrangeButton>
+                    </UnStyledLink>
+                ) :
+                (
+                    <OrangeButton form="hook-form">
+                        CHECKOUT
                     </OrangeButton>
-                </UnStyledLink>
-            ) :
+                )
+                }
+            </>
+            ): 
             (
-                <OrangeButton form="hook-form">
-                    CHECKOUT
-                </OrangeButton>
-            )
-            }
+            <LoaderComponent />
+            )}
         </>
     );
 }
