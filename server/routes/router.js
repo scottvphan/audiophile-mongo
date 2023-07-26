@@ -1,21 +1,146 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const User = require("../models/User");
 const Product = require("../models/Product");
+const Rate = require("../models/Rate");
+require("dotenv/config");
+
+const Shipengine = require("shipengine");
+const shipengine = new Shipengine(process.env.SE_URI);
 
 const app = express();
 app.use(express.json());
 
-router.post("/form", (req, res) => {
-    const userData = ({ name, email, phoneNumber, address } = req.body);
-    const user = new User({
-        name: userData.name,
-        email: userData.email,
-        phoneNumber: userData.phoneNumber,
-        address: userData.address,
+async function getRatesWithShipmentDetails(userData) {
+    const params = {
+        rateOptions: {
+            carrierIds: [ "se-5035034", ],
+        },
+        shipment: {
+            validateAddress: "no_validation",
+            shipTo: {
+                name: userData.name ? userData.name : undefined,
+                phone: userData.phoneNumber ? userData.phoneNumber : undefined,
+                addressLine1: userData.address.street,
+                cityLocality: userData.address.city,
+                stateProvince: userData.address.state,
+                postalCode: userData.address.zipcode,
+                countryCode: userData.address.country,
+                addressResidentialIndicator: "yes",
+            },
+            shipFrom: {
+                companyName: "Audiophile",
+                name: "John Doe",
+                phone: "111-111-1111",
+                addressLine1: "4009 Marathon Blvd",
+                addressLine2: "Suite 300",
+                cityLocality: "Austin",
+                stateProvince: "TX",
+                postalCode: "78756",
+                countryCode: "US",
+                addressResidentialIndicator: "no",
+            },
+            packages: [
+                {
+                    weight: {
+                        value: 1.0,
+                        unit: "pound",
+                    },
+                },
+            ],
+        },
+    };
+
+    try {
+        const result = await shipengine.getRatesWithShipmentDetails(params);
+        return result
+    } catch (e) {
+        console.log(e.message);
+    }
+}
+
+router.get("/data", (req, res) => {
+    Product.findOne().then((product) => {
+        if (!product) {
+            res.status(404).json({ message: "Products not found" });
+        } else {
+            const productData = product;
+            res.json(productData);
+        }
     });
+});
+
+router.get("/cart/:email", (req, res) => {
+    const userEmail = req.params.email;
+    User.findOne({ email: userEmail })
+        .then((user) => {
+            if (!user) {
+                res.status(404).json({ message: "User not found" });
+            } else {
+                const cartData = user.cart;
+                res.json(cartData);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({ message: "Internal Server Error" });
+        });
+});
+
+router.get("/rates:form", async (req, res) => {
+    const data = JSON.parse(req.params.form.substring(1))
+    const userData = ({
+        address:{
+            street: data.street,
+            zipcode: data.zipcode,
+            city: data.city,
+            country: data.country,
+            state: data.state,
+        },
+    })
+    console.log(data)
+    console.log(userData)
+    try{
+        const shippingRate = await getRatesWithShipmentDetails(userData)
+        res.json( {shippingRate} )
+    } catch ( error ) {
+        console.log( error )
+    }
+})
+
+router.post("/form", async(req, res) => {
+    const userData = ({
+        name,
+        email,
+        phoneNumber,
+        address,
+        credit,
+        cash,
+        cart,
+    } = req.body[0]);
+    const accountEmail = req.body[1];
+    const shippingRate = getRatesWithShipmentDetails(userData);
+    getRatesWithShipmentDetails(userData);
+    // try {
+    //     const shippingRate = await getRatesWithShipmentDetails(userData)
+    //     res.json( {shippingRate} )
+    // } catch (error) {
+    //     console.log(error)
+    //     return res.status(500).json({ error: "Internal Server Error" })
+    // }
+    
+    // User.findOneAndUpdate(
+    //     { email: accountEmail },
+    //     { $set: { orders: userData } },
+    //     { new: true }
+    // )
+    //     .then((updatedUser) => {
+    //         res.sendStatus(200);
+    //     })
+    //     .catch((err) => {
+    //         console.error(err);
+    //         res.sendStatus(500);
+    //     });
 });
 
 router.post("/user", (req, res) => {
@@ -41,23 +166,11 @@ router.post("/user", (req, res) => {
     });
 });
 
-router.get("/data", (req, res) => {
-    Product.findOne()
-        .then((product) => {
-            if(!product){
-                res.status(404).json( {message: "Products not found"} )
-            } else {
-                const productData = product
-                res.json(productData)
-            }
-        })
-});
-
 router.post("/cart", (req, res) => {
     const cartData = req.body[0];
-    const userEmail = req.body[1];
+    const accountEmail = req.body[1];
     User.findOneAndUpdate(
-        { email: userEmail },
+        { email: accountEmail },
         { $set: { cart: Object.values(cartData) } },
         { new: true }
     )
@@ -67,23 +180,6 @@ router.post("/cart", (req, res) => {
         .catch((err) => {
             console.error(err);
             res.sendStatus(500);
-        });
-});
-
-router.get("/cart/:email", (req, res) => {
-    const userEmail = req.params.email;
-    User.findOne({ email: userEmail })
-        .then((user) => {
-            if (!user) {
-                res.status(404).json({ message: "User not found" });
-            } else {
-                const cartData = user.cart;
-                res.json(cartData);
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({ message: "Internal Server Error" });
         });
 });
 

@@ -18,6 +18,24 @@ const UserSchema = new mongoose.Schema(
                 id: Number,
             },
         ],
+        orders: [
+            {
+                name: String,
+                email: String,
+                phoneNumber: String,
+                address: {
+                    street: String,
+                    zipcode: String,
+                    city: String, 
+                    country: String,
+                    state: String, 
+                },
+                cart: Array,
+                credit: Boolean,
+                cash: Boolean,
+                entryDate: {type:Date, default:Date.now}
+            },
+        ],
     },
     { timestamps: true }
 );
