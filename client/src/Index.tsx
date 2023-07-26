@@ -14,6 +14,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import CartPage from "./pages/CartPage";
 import Loader from "./components/Loader";
 import ErrorPage from "./pages/ErrorPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 const GlobalStyle = createGlobalStyle`
     html,
@@ -56,6 +57,7 @@ export default function Index({ data, dataLoaded }: any) {
                 />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/confirmation" element={<ConfirmationPage />} />
                 <Route path="*" element={<ErrorPage />} />
             </Route>
         )
