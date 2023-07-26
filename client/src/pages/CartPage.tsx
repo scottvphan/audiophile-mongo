@@ -6,6 +6,7 @@ import GoBackButton from "../components/GoBackButton";
 import { useEffect, useState } from 'react'
 import {v4 as uuidv4} from 'uuid'
 import CartPreviewComponent from "../components/CartPreviewComponent";
+import LoaderComponent from "../components/LoaderComponent";
 
 const CartPageContainer = styled.div`
     padding: 1rem 20rem;
@@ -71,7 +72,7 @@ const MappedCartContainer = styled.div`
     margin:2rem 0;
 `;
 export default function CartPage() {
-    const { cart, setCart } = useLayoutOutletContext()
+    const { cart, setCart, isCartLoaded } = useLayoutOutletContext()
     const [mappedCart, setMappedCart] = useState<any>('')
     
     useEffect(() => {
@@ -96,7 +97,7 @@ export default function CartPage() {
                 <CartContainer>
                     <CheckoutHeading>SHOPPING CART</CheckoutHeading>
                     <MappedCartContainer>
-                        {mappedCart}
+                        {isCartLoaded ? mappedCart : <LoaderComponent />}
                     </MappedCartContainer>
                 </CartContainer>
                 <CartSummaryContainer>
