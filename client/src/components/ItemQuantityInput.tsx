@@ -18,6 +18,7 @@ const InputAmount = styled.div`
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
+    cursor: default;
 `;
 const InputIcons = styled.p`
     color: #000;
@@ -66,7 +67,6 @@ export default function ItemQuantityInput({
     }
     useEffect(() => {
         if (setCart) {
-            // console.log(data);
             if (prevQuantityRef.current !== currentQuantity) {
                 if (currentQuantity > 0) {
                     setCart((prevCart: any) => ({
