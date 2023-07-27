@@ -4,8 +4,9 @@ import { Ring } from "@uiball/loaders";
 const LoaderContainer = styled.div`
     color:black;
     box-sizing:border-box;
-    margin:0 auto;
-    width:100vw;
+    margin:0;
+    padding:0;
+    width:99vw;
     height:100vh;
     display:flex;
     justify-content: center;
