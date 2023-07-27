@@ -57,17 +57,17 @@ const CheckoutSummaryContainer = styled.div`
 `;
 
 export default function CheckoutPage() {
-    const { formData, setFormData, setIsCheckoutModalOpen } = useLayoutOutletContext()
+    const { formData, setFormData } = useLayoutOutletContext()
 
     return (
         <CheckoutPageContainer>
             <GoBackButton />
             <CheckoutContainer>
                 <CheckoutFormContainer>
-                    <CheckoutForm formData={formData} setFormData={setFormData} setIsCheckoutModalOpen={setIsCheckoutModalOpen}  />
+                    <CheckoutForm formData={formData} setFormData={setFormData} />
                 </CheckoutFormContainer>
                 <CheckoutSummaryContainer>
-                    <CheckoutSummary />
+                    <CheckoutSummary isCheckout />
                 </CheckoutSummaryContainer>
             </CheckoutContainer>
         </CheckoutPageContainer>
