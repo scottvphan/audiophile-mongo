@@ -248,7 +248,6 @@ export default function ProductDetails(props: any) {
         setMappedList(mappedData);
         setMappedListLoaded(true);
     }, [data.includes]);
-    console.log(cart)
     useEffect(() => {
         const mappedData = data.others.map((data: any) => {
             return (
@@ -267,7 +266,6 @@ export default function ProductDetails(props: any) {
         });
         setMappedRecommended(mappedData);
     }, [data.others]);
-    console.log(data)
     function addToCart() {
         if (itemAmount > 0) {
             setCart({
