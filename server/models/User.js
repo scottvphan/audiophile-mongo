@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema(
                 price: Number,
                 total: Number,
                 id: Number,
+                weight: Number,
             },
         ],
         orders: [

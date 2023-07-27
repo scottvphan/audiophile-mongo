@@ -29,9 +29,10 @@ export default function Layout() {
         isHamburgerOpen: isHamburgerOpen,
         setIsHamburgerOpen: setIsHamburgerOpen,
     };
-    const [shippingPrice, setShippingPrice] = useState<any>("");
-    const [isShippingPriceLoaded, setIsShippingPriceLoaded] =
+    const [shippingData, setShippingData] = useState<any>("");
+    const [isShippingDataLoaded, setIsShippingDataLoaded] =
         useState<boolean>(false);
+    const [shippingPrice, setShippingPrice] = useState<any>("");
 
     const postOrder = async () => {
         const dataPosted = {
@@ -84,16 +85,13 @@ export default function Layout() {
                 }
             });
     };
-
-    const getShippingPrice = async () => {
-        console.log("getting rates");
-        console.log(formData.address);
+    
+    const getShippingData = async () => {
+        console.log(formData)
         axios
-            .get(
-                `http://localhost:4000/rates:${JSON.stringify(
-                    formData.address
-                )}`
-            )
+            .get(`http://localhost:4000/rates`, { params: {
+                form: formData
+            } })
             .then((res) => {
                 console.log(res.data.shippingRate.rateResponse.rates);
                 const rates = res.data.shippingRate.rateResponse.rates;
@@ -106,8 +104,8 @@ export default function Layout() {
                     };
                 });
                 console.log(mappedRates);
-                setShippingPrice(mappedRates);
-                setIsShippingPriceLoaded(true);
+                setShippingData(mappedRates);
+                setIsShippingDataLoaded(true);
             });
     };
 
@@ -119,23 +117,6 @@ export default function Layout() {
     }, [isAuthenticated]);
 
     useEffect(() => {
-        if (formData) {
-            axios
-                .get(
-                    `http://localhost:4000/rates:${JSON.stringify(
-                        formData.address
-                    )}`
-                )
-                .then((res) => {
-                    console.log(res.data);
-                });
-        }
-        // if(formData) {
-        //     getShippingPrice()
-        // }
-    }, [formData]);
-
-    useEffect(() => {
         if (!isAuthenticated && !isLoading) {
             if (JSON.stringify(cart) !== sessionStorage.getItem("cart")) {
                 sessionStorage.setItem("cart", JSON.stringify(cart));
@@ -143,24 +124,37 @@ export default function Layout() {
             }
         } else {
             if (isCartLoaded) {
-                sessionStorage.clear();
+                sessionStorage.removeItem("cart");
                 updateCart();
-                setIsShippingPriceLoaded(false);
+                setIsShippingDataLoaded(false);
             }
         }
     }, [cart, isAuthenticated, user, isLoading, isCartLoaded]);
 
-    // useEffect(() => {
-    //     isCartLoaded && updateCart()
-    // }, [isCartOpen])
-
     useEffect(() => {
         if (formData) {
             postOrder();
-            getShippingPrice();
+            console.log(formData);
+            getShippingData();
             setFormData(undefined);
         }
     }, [formData]);
+
+    useEffect(() => {
+        if(shippingData){
+            sessionStorage.setItem("shippingData", JSON.stringify(shippingData))
+        }
+    }, [shippingData])
+
+    useEffect(() =>{
+        if(isCartLoaded){
+            const sessionShippingData = JSON.parse(sessionStorage.getItem("shippingData") as any)
+            if(sessionShippingData){
+                setShippingData(sessionShippingData)
+                setIsShippingDataLoaded(true)
+            }
+        }
+    }, [isCartLoaded])
 
     return (
         <>
@@ -186,6 +180,10 @@ export default function Layout() {
                     isCheckoutModalOpen,
                     setIsCheckoutModalOpen,
                     isCartLoaded,
+                    shippingData,
+                    isShippingDataLoaded,
+                    shippingPrice,
+                    setShippingPrice,
                 }}
             />
             <Footer />
@@ -197,4 +195,3 @@ export default function Layout() {
 export function useLayoutOutletContext() {
     return useOutletContext<any>();
 }
-//

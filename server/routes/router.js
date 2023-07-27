@@ -40,14 +40,7 @@ async function getRatesWithShipmentDetails(userData) {
                 countryCode: "US",
                 addressResidentialIndicator: "no",
             },
-            packages: [
-                {
-                    weight: {
-                        value: 1.0,
-                        unit: "pound",
-                    },
-                },
-            ],
+            packages: userData.items,
         },
     };
 
@@ -87,19 +80,26 @@ router.get("/cart/:email", (req, res) => {
         });
 });
 
-router.get("/rates:form", async (req, res) => {
-    const data = JSON.parse(req.params.form.substring(1))
+router.get("/rates", async (req, res) => {
+    const data = req.query.form
+    const mappedCart = data.cart.map(data =>{
+        return {
+            weight: {
+                value: data.weight * data.quantity,
+                unit: "pound",
+            },
+        }
+    })
     const userData = ({
         address:{
-            street: data.street,
-            zipcode: data.zipcode,
-            city: data.city,
-            country: data.country,
-            state: data.state,
+            street: data.address.street,
+            zipcode: data.address.zipcode,
+            city: data.address.city,
+            country: data.address.country,
+            state: data.address.state,
         },
+        items:mappedCart
     })
-    console.log(data)
-    console.log(userData)
     try{
         const shippingRate = await getRatesWithShipmentDetails(userData)
         res.json( {shippingRate} )
@@ -108,7 +108,7 @@ router.get("/rates:form", async (req, res) => {
     }
 })
 
-router.post("/form", async(req, res) => {
+router.post("/order", async(req, res) => {
     const userData = ({
         name,
         email,
@@ -119,8 +119,6 @@ router.post("/form", async(req, res) => {
         cart,
     } = req.body[0]);
     const accountEmail = req.body[1];
-    const shippingRate = getRatesWithShipmentDetails(userData);
-    getRatesWithShipmentDetails(userData);
     // try {
     //     const shippingRate = await getRatesWithShipmentDetails(userData)
     //     res.json( {shippingRate} )
