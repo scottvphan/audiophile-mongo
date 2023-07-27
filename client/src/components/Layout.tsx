@@ -133,8 +133,6 @@ export default function Layout() {
 
     useEffect(() => {
         if (formData) {
-            postOrder();
-            console.log(formData);
             getShippingData();
             setFormData(undefined);
         }
@@ -155,10 +153,14 @@ export default function Layout() {
             }
         }
     }, [isCartLoaded])
-
+    
+    function handleCloseModal() {
+        setIsCartOpen(false);
+    }
     return (
         <>
-            {isCartOpen || (isCheckoutModalOpen && <Backdrop />)}
+            {isCartOpen && (<Backdrop onClick={handleCloseModal} />)}
+            {isCheckoutModalOpen && (<Backdrop />)}
             {isCheckoutModalOpen && (
                 <CheckoutModal
                     cart={cart}

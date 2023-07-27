@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CartComponent from "./CartComponent";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Backdrop, OrangeButton, UnStyledLink } from "./StyledComponents";
+import { OrangeButton, UnStyledLink } from "./StyledComponents";
 
 const CartContainer = styled.div`
     position: absolute;
@@ -106,15 +106,11 @@ export default function CartModal({ cart, setCart, setIsCartOpen }: any) {
         setCart({});
         setIsCartOpen(false);
     }
-    function handleCloseModal() {
-        setIsCartOpen(false);
-    }
     
     const cartLength = Object.values(cart).length;
 
     return (
         <>
-            <Backdrop onClick={handleCloseModal} />
             <CartContainer>
                 {cartLength > 0 ? (
                     <>
