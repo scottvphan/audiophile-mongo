@@ -8,7 +8,7 @@ import { useState } from "react";
 import SVG from "react-inlinesvg/esm";
 import { z } from "zod";
 import { useLayoutOutletContext } from "./Layout";
-
+import { useNavigate } from "react-router-dom";
 interface FormInputs {
     name: string;
     email: string;
@@ -194,11 +194,10 @@ const CheckoutHeading = styled.h1`
 `;
 export default function CheckoutForm({
     setFormData,
-    setIsCheckoutModalOpen,
 }: any) {
     const [isCreditSelected, setIsCreditSelected] = useState<boolean>(true);
     const [isCashSelected, setIsCashSelected] = useState<boolean>(false);
-
+    const navigate = useNavigate();
     const { cart } = useLayoutOutletContext();
 
     const schema = z.object({
@@ -254,7 +253,7 @@ export default function CheckoutForm({
             cart: Object.values(cart),
         };
         setFormData(formData);
-        setIsCheckoutModalOpen((prevCheckout: any) => !prevCheckout);
+        navigate("/confirmation")
         reset();
     };
 
