@@ -10,6 +10,7 @@ import { Backdrop } from "./StyledComponents";
 import CheckoutModal from "./CheckoutModal";
 import HamburgerMenu from "./HamburgerMenu";
 import axios from "axios";
+import EmailVerificationModal from "./EmailVerificationModal";
 
 export default function Layout() {
     const { isAuthenticated, user, isLoading } = useAuth0();
@@ -21,6 +22,7 @@ export default function Layout() {
     );
     const [isCartLoaded, setIsCartLoaded] = useState<boolean>(false);
     const [isCartOpen, setIsCartOpen] = useState<any>(false);
+    const [totalPrice, setTotalPrice] = useState<number>(0)
     const NavbarProps = {
         cart: cart,
         setCart: setCart,
@@ -33,17 +35,21 @@ export default function Layout() {
     const [isShippingDataLoaded, setIsShippingDataLoaded] =
         useState<boolean>(false);
     const [shippingPrice, setShippingPrice] = useState<any>("");
-
-    const postOrder = async () => {
+    const [isEmailVerificationOpen, setIsEmailVerificationOpen] = useState<boolean>(false)
+    const postOrder = async (tax:number) => {
         const dataPosted = {
             name: formData.name,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
             address: formData.address,
+            cart: cart,
             credit: formData?.credit,
             cash: formData?.cash,
+            shippingPrice: shippingPrice,
+            tax: tax,
+            totalPrice: totalPrice,
         };
-        await axios.post("http://localhost:4000/form", [
+        await axios.post("http://localhost:4000/orders", [
             dataPosted,
             user?.email,
         ]);
@@ -53,6 +59,7 @@ export default function Layout() {
         const userData = {
             name: user?.name,
             email: user?.email,
+            email_verified: user?.email_verified,
         };
         await axios.post("http://localhost:4000/user", userData);
     };
@@ -85,13 +92,28 @@ export default function Layout() {
                 }
             });
     };
-    
+
+    const getAuthToken = async () => {
+        axios.get(`http://localhost:4000/authtoken`)
+        .then((res) => {
+            // const token = res.data
+            console.log(res.data)
+        })
+        .catch((error) => {
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+
     const getShippingData = async () => {
-        console.log(formData)
+        console.log(formData);
         axios
-            .get(`http://localhost:4000/rates`, { params: {
-                form: formData
-            } })
+            .get(`http://localhost:4000/rates`, {
+                params: {
+                    form: formData,
+                },
+            })
             .then((res) => {
                 console.log(res.data.shippingRate.rateResponse.rates);
                 const rates = res.data.shippingRate.rateResponse.rates;
@@ -108,6 +130,12 @@ export default function Layout() {
                 setIsShippingDataLoaded(true);
             });
     };
+    
+    useEffect(() => {
+        if(shippingData){
+            setShippingPrice(shippingData[2].shippingAmount.amount)
+        }
+    }, [shippingData])
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -117,6 +145,9 @@ export default function Layout() {
     }, [isAuthenticated]);
 
     useEffect(() => {
+        isAuthenticated && !user?.email_verified ? 
+        setIsEmailVerificationOpen(true) : 
+        setIsEmailVerificationOpen(false)
         if (!isAuthenticated && !isLoading) {
             if (JSON.stringify(cart) !== sessionStorage.getItem("cart")) {
                 sessionStorage.setItem("cart", JSON.stringify(cart));
@@ -134,38 +165,52 @@ export default function Layout() {
     useEffect(() => {
         if (formData) {
             getShippingData();
-            setFormData(undefined);
         }
     }, [formData]);
 
     useEffect(() => {
-        if(shippingData){
-            sessionStorage.setItem("shippingData", JSON.stringify(shippingData))
+        if (shippingData) {
+            sessionStorage.setItem(
+                "shippingData",
+                JSON.stringify(shippingData)
+            );
         }
-    }, [shippingData])
+    }, [shippingData]);
 
-    useEffect(() =>{
-        if(isCartLoaded){
-            const sessionShippingData = JSON.parse(sessionStorage.getItem("shippingData") as any)
-            if(sessionShippingData){
-                setShippingData(sessionShippingData)
-                setIsShippingDataLoaded(true)
+    useEffect(() => {
+        if (isCartLoaded) {
+            const sessionShippingData = JSON.parse(
+                sessionStorage.getItem("shippingData") as any
+            );
+            if (sessionShippingData) {
+                setShippingData(sessionShippingData);
+                setIsShippingDataLoaded(true);
             }
         }
-    }, [isCartLoaded])
-    
+    }, [isCartLoaded]);
+
     function handleCloseModal() {
         setIsCartOpen(false);
     }
+    useEffect(() => {
+        console.log(user)
+    }, [user])
     return (
         <>
-            {isCartOpen && (<Backdrop onClick={handleCloseModal} />)}
-            {isCheckoutModalOpen && (<Backdrop />)}
+            { isEmailVerificationOpen && (
+            <>
+                <EmailVerificationModal setIsEmailVerificationOpen = {setIsEmailVerificationOpen} />
+                <Backdrop top />
+            </>
+            )}
+            {isCartOpen && <Backdrop top={false} onClick={handleCloseModal} />}
+            {isCheckoutModalOpen && <Backdrop top />}
             {isCheckoutModalOpen && (
                 <CheckoutModal
                     cart={cart}
                     setIsCheckoutModalOpen={setIsCheckoutModalOpen}
                     setCart={setCart}
+                    totalPrice = {totalPrice}
                 />
             )}
             <Navbar {...NavbarProps} />
@@ -186,6 +231,9 @@ export default function Layout() {
                     isShippingDataLoaded,
                     shippingPrice,
                     setShippingPrice,
+                    postOrder,
+                    totalPrice,
+                    setTotalPrice,
                 }}
             />
             <Footer />

@@ -15,6 +15,7 @@ import CartPage from "./pages/CartPage";
 import Loader from "./components/Loader";
 import ErrorPage from "./pages/ErrorPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const GlobalStyle = createGlobalStyle`
     html,
@@ -38,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function Index({ data, dataLoaded }: any) {
+    const { isLoading } = useAuth0();
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/" element={<Layout />}>
@@ -62,10 +64,17 @@ export default function Index({ data, dataLoaded }: any) {
             </Route>
         )
     );
+
     return (
         <>
             <GlobalStyle />
-            {dataLoaded ? <RouterProvider router={router} /> : <Loader />}
+            <>
+                {dataLoaded && !isLoading ? (
+                    <RouterProvider router={router} />
+                ) : (
+                    <Loader />
+                )}
+            </>
         </>
     );
 }

@@ -5,8 +5,8 @@ const UserSchema = new mongoose.Schema(
         name: {
             type: String,
         },
-        email: {
-            type: String,
+        email:{
+            type:String,
         },
         cart: [
             {
@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema(
                 cart: Array,
                 credit: Boolean,
                 cash: Boolean,
+                shippingPrice: Number,
+                tax: Number,
+                totalPrice: Number,
                 entryDate: {type:Date, default:Date.now}
             },
         ],

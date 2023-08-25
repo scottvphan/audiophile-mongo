@@ -6,7 +6,7 @@ export const UnStyledLink = styled(Link)`
     color: inherit;
     width: 100%;
 `;
-export const Backdrop = styled.div`
+export const Backdrop = styled.div<{top: unknown}>`
     position: fixed;
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@ export const Backdrop = styled.div`
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: block;
-    z-index: 10;
+    z-index: ${(top:unknown) => top ? "100" : "10"};
 `;
 export const StyledSVG = styled(SVG)`
     cursor: pointer;

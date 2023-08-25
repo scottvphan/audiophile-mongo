@@ -57,9 +57,8 @@ interface Cart {
 }
 
 export default function CheckoutSummary({ isPreview, isCheckout, isConfirmation, setIsCheckoutModalOpen }: any) {
-    const { cart, isCartLoaded, shippingData } = useLayoutOutletContext();
+    const { cart, isCartLoaded, shippingData, postOrder, setFormData, shippingPrice, totalPrice, setTotalPrice } = useLayoutOutletContext();
     const [productTotal, setProductTotal] = useState<number>(0);
-    const [totalPrice, setTotalPrice] = useState<number>(0);
     const [mappedProducts, setMappedProducts] = useState<any>(0);
     const [vat, setVat] = useState<number>(0);
 
@@ -90,18 +89,20 @@ export default function CheckoutSummary({ isPreview, isCheckout, isConfirmation,
         if(!shippingData){
             setProductTotal(total);
             const vat2 = parseFloat((total * 0.0625).toFixed(2));
-            setTotalPrice(total + vat2 + 50);
+            setTotalPrice((total + vat2 + 50).toFixed(2));
             setVat(vat2);
         } else{
             setProductTotal(total);
             const vat2 = parseFloat((total * 0.0625).toFixed(2));
-            setTotalPrice(total + vat2 + shippingData[2].shippingAmount.amount);
+            setTotalPrice((total + vat2 + shippingData[2].shippingAmount.amount).toFixed(2));
             setVat(vat2);
         }
-    }, [cart, shippingData, isConfirmation]);
+    }, [cart, shippingData, isConfirmation, shippingPrice, setTotalPrice]);
 
-    function handleCheckoutModal(){
+    function handleConfirmationButton(){
         setIsCheckoutModalOpen((prevCheckout: any) => !prevCheckout);
+        postOrder(vat);
+        setFormData(undefined);
     }
 
     return (
@@ -119,7 +120,7 @@ export default function CheckoutSummary({ isPreview, isCheckout, isConfirmation,
                                     SHIPPING
                                 </CheckoutInformationHeading>
                                 <CheckoutInformationText>
-                                    $ {shippingData ? shippingData[2].shippingAmount.amount.toFixed(2) : "MISSING DATA" }
+                                    $ {shippingPrice ? shippingPrice : "MISSING DATA" }
                                 </CheckoutInformationText>
                             </>
                         )}
@@ -139,7 +140,7 @@ export default function CheckoutSummary({ isPreview, isCheckout, isConfirmation,
                             TOTAL AMOUNT
                         </CheckoutInformationHeading>
                         <CheckoutInformationText>
-                            $ {totalPrice.toFixed(2)}
+                            $ {totalPrice}
                         </CheckoutInformationText>
                     </CheckoutInformationContainer>
                     {isPreview &&
@@ -151,7 +152,7 @@ export default function CheckoutSummary({ isPreview, isCheckout, isConfirmation,
                         <OrangeButton form="hook-form">CONFIRM PURCHASE</OrangeButton>
                     }
                     {isConfirmation && 
-                        <OrangeButton onClick={handleCheckoutModal}>CHECKOUT</OrangeButton>
+                        <OrangeButton onClick={handleConfirmationButton}>CHECKOUT</OrangeButton>
                     }
                 </>
             ) : (

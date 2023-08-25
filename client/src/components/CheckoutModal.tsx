@@ -115,21 +115,15 @@ const ViewingText = styled.p`
         text-decoration: underline;
     }
 `;
-interface Cart {
-    name: string;
-    image: string;
-    quantity: string;
-    total: number;
-}
 
 export default function CheckoutModal({
     cart,
     setIsCheckoutModalOpen,
     setCart,
+    totalPrice,
 }: any) {
     const [mappedProducts, setMappedProducts] = useState<any>("");
     const [isHidden, setIsHidden] = useState<boolean>(true);
-    const [totalPrice, setTotalPrice] = useState<any>("");
     useEffect(() => {
         const cartArray = Object.values(cart);
         const mappedArray = cartArray.map((cart: any) => {
@@ -146,16 +140,8 @@ export default function CheckoutModal({
             return <CartItemComponent key={uuidv4()} {...cartProps} />;
         });
         setMappedProducts(mappedArray);
-        const total = Object.values(cart).reduce(
-            (accumulator: number, item: unknown) => {
-                const cartItem = item as Cart;
-                return accumulator + cartItem.total;
-            },
-            0
-        );
-        const vat2 = parseFloat((total * 0.2).toFixed(2));
-        setTotalPrice(total + vat2 + 50);
     }, [cart]);
+
     function handleButton() {
         setIsCheckoutModalOpen(false);
         setCart({});
